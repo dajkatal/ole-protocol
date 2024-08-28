@@ -72,7 +72,7 @@ const Home = () => {
         title: 'Support decentralized education! 🌟',
         description: '<img src="https://img.shields.io/github/stars/dajkatal/ole-protocol.svg?style=social&label=Star" />',
         href: 'https://github.com/dajkatal/ole-protocol',
-        action: false,
+        action: 'false',
     };
 
     return (
