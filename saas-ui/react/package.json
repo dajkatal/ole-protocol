@@ -1,0 +1,95 @@
+{
+  "name": "@saas-ui-pro/react",
+  "version": "0.35.5",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    },
+    "./theme": {
+      "source": "./src/theme/index.ts",
+      "require": "./dist/theme/index.js",
+      "types": "./dist/theme/index.d.ts",
+      "import": "./dist/theme/index.mjs"
+    },
+    "./src": {
+      "default": "./src/index.ts"
+    },
+    "./src/theme": {
+      "default": "./src/theme/index.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/index.d.ts",
+        "dist/theme/index.d.ts",
+        "src/index.ts"
+      ]
+    },
+    "./theme": {
+      "*": [
+        "dist/theme/index.d.ts",
+        "src/index.ts"
+      ]
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.saas-ui.dev"
+  },
+  "scripts": {
+    "bundle": "yarn pack --out ../dist/%s-%v.tgz",
+    "build": "tsup src/index.ts src/theme/index.ts --config tsup.config.ts",
+    "lint": "TIMING=1 eslint src/**/*.ts* --fix",
+    "clean": "rm -rf dist"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/saas-js/saas-ui-pro.git",
+    "directory": "saas-ui/pro"
+  },
+  "dependencies": {
+    "@chakra-ui/anatomy": "^2.2.2",
+    "@chakra-ui/clickable": "^2.1.0",
+    "@chakra-ui/icon": "^3.2.0",
+    "@chakra-ui/react-utils": "^2.0.12",
+    "@chakra-ui/styled-system": "^2.9.2",
+    "@chakra-ui/system": "^2.6.2",
+    "@chakra-ui/theme-tools": "^2.1.2",
+    "@chakra-ui/utils": "^2.0.15",
+    "@react-hookz/web": "^24.0.4",
+    "@saas-ui-pro/onboarding": "workspace:*",
+    "@saas-ui/forms": "^2.6.7",
+    "@saas-ui/react-utils": "^2.0.1",
+    "@saas-ui/theme": "^2.4.1",
+    "@tanstack/react-table": "^8.17.3",
+    "@tanstack/react-virtual": "^3.7.0",
+    "@zag-js/dom-utils": "^0.2.4",
+    "date-fns": "^3.6.0",
+    "polished": "^4.3.1"
+  },
+  "peerDependencies": {
+    "@chakra-ui/react": ">=2.5.0",
+    "@emotion/react": ">=11",
+    "@emotion/styled": ">=11",
+    "@saas-ui/react": ">=2.0.0",
+    "framer-motion": ">=5.5.0",
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@ngneat/falso": "^2.27.0",
+    "@saas-ui/date-picker": "^0.12.38",
+    "react-icons": "^5.2.1",
+    "tsup": "^8.1.0"
+  }
+}

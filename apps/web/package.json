@@ -1,0 +1,52 @@
+{
+  "name": "web",
+  "version": "0.30.3",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "jest",
+    "typecheck": "next lint"
+  },
+  "dependencies": {
+    "@api/client": "workspace:*",
+    "@app/nextjs": "workspace:*",
+    "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/system": "^2.6.2",
+    "@common/i18n": "workspace:*",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@fontsource-variable/inter": "^5.0.18",
+    "@next/bundle-analyzer": "^14.2.4",
+    "@saas-ui-pro/billing": "^0.11.5",
+    "@saas-ui-pro/feature-flags": "^0.14.5",
+    "@saas-ui-pro/onboarding": "^0.13.6",
+    "@saas-ui-pro/react": "^0.35.0",
+    "@saas-ui/auth": "^3.1.9",
+    "@saas-ui/charts": "^0.11.2",
+    "@saas-ui/date-picker": "^0.12.38",
+    "@saas-ui/next-workspaces": "^0.3.0",
+    "@saas-ui/react": "^2.8.7",
+    "@tanstack/react-query": "^5.45.1",
+    "@tanstack/react-query-devtools": "^5.45.1",
+    "@ui/lib": "workspace:*",
+    "@ui/theme": "workspace:*",
+    "cookies-next": "^4.2.1",
+    "framer-motion": "^10.18.0",
+    "next": "^14.2.4",
+    "next-auth": "^4.24.7",
+    "next-svgr": "^0.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "^14.2.4",
+    "@svgr/webpack": "^5.5.0",
+    "webpack": "^5.92.1"
+  },
+  "msw": {
+    "workerDirectory": "public"
+  }
+}

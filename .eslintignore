@@ -1,0 +1,14 @@
+**/.next
+**/_next
+**/next.config.js
+**/next.config.mjs
+**/nextron.config.js
+**/generated
+**/*.generated.*
+**/*.graphql.d.ts
+**/*.graphqls.d.ts
+**/dist
+
+apps/desktop/app
+
+examples/**/*

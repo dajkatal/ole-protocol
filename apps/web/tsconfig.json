@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "downlevelIteration": true,
+    "jsx": "preserve",
+    "baseUrl": "./",
+    "paths": {
+      "@app/config": ["../../packages/app-config"],
+      "@app/features/*": ["./src/features/*"],
+      "@app/nextjs": ["../../packages/app-nextjs/src"],
+      "marketing/*": ["../../packages/marketing/*"],
+      "#lib/*": ["./src/lib/*"]
+    },
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "customConditions": ["source"]
+  },
+  "include": [
+    "next.d.ts",
+    "src",
+    ".next/types/**/*.ts",
+    "../../saas-ui/**/src/**/*.ts"
+  ],
+  "exclude": ["node_modules", "cypress"]
+}
