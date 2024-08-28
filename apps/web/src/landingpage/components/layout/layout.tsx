@@ -18,7 +18,7 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = (props) => {
-  const { children, announcementProps, headerProps, footerProps } = props
+  const { children, announcementProps, headerProps= {}, footerProps = {} } = props
   return (
     <Box>
       <SkipNavLink>Skip to content</SkipNavLink>
