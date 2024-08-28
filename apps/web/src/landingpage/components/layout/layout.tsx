@@ -13,8 +13,8 @@ import { Footer, FooterProps } from './footer'
 interface LayoutProps {
   children: ReactNode
   announcementProps: AnnouncementBannerProps
-  headerProps: HeaderProps
-  footerProps: FooterProps
+  headerProps?: HeaderProps
+  footerProps?: FooterProps
 }
 
 export const Layout: React.FC<LayoutProps> = (props) => {
