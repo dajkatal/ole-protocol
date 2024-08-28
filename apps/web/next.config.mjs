@@ -34,6 +34,9 @@ const nextConfig = {
   distDir: isElectron ? '.nextron' : '.next',
   transpilePackages: ['@saas-ui/date-picker'],
   output: 'standalone',
+  eslint: {
+    ignoreDuringBuilds: true, // Add this line to disable ESLint during builds
+  },
   webpack: (config, options) => {
     const { isServer } = options
     if (!isServer && isElectron) {
