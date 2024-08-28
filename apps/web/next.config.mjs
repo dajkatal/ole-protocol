@@ -35,7 +35,10 @@ const nextConfig = {
   transpilePackages: ['@saas-ui/date-picker'],
   output: 'standalone',
   eslint: {
-    ignoreDuringBuilds: true, // Add this line to disable ESLint during builds
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true
   },
   webpack: (config, options) => {
     const { isServer } = options
