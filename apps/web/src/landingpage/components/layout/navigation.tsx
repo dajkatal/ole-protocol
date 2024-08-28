@@ -8,6 +8,8 @@ import { useScrollSpy } from "src/landingpage/hooks/use-scrollspy";
 import { MobileNavButton } from "src/landingpage/components/mobile-nav";
 import { MobileNavContent } from "src/landingpage/components/mobile-nav";
 import { useDisclosure, useUpdateEffect } from "@chakra-ui/react";
+
+// @ts-ignore
 import { useOCAuth } from '@opencampus/ocid-connect-js';  // Import useOCAuth
 
 const Navigation: React.FC = () => {

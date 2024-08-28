@@ -1,3 +1,4 @@
+// @ts-ignore
 import { useOCAuth } from '@opencampus/ocid-connect-js';
 
 export const useAuth = () => {

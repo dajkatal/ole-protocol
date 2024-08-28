@@ -1,5 +1,6 @@
 'use client'
 
+// @ts-ignore
 import { LoginCallBack } from '@opencampus/ocid-connect-js';
 import { useRouter } from 'next/navigation';
 
