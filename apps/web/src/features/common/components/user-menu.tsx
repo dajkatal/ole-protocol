@@ -32,9 +32,8 @@ export const UserMenu = () => {
   const queryClient = useQueryClient()
 
   const logOutAndClearCache = () => {
-    logOut().then(() => {
-       queryClient.clear()
-    })
+    logOut();
+    queryClient.clear();
   }
 
   const { toggleColorMode, colorMode } = useColorMode()

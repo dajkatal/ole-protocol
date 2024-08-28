@@ -1,7 +1,7 @@
 'use client'
 import * as React from "react";
 import { HStack, Button } from "@chakra-ui/react";  // Import Button
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation'; // Import usePathname
 import siteConfig from "src/landingpage/data/config";
 import { NavLink } from "src/landingpage/components/nav-link";
 import { useScrollSpy } from "src/landingpage/hooks/use-scrollspy";
@@ -14,7 +14,7 @@ import { useOCAuth } from '@opencampus/ocid-connect-js';  // Import useOCAuth
 
 const Navigation: React.FC = () => {
     const mobileNav = useDisclosure();
-    const router = useRouter();
+    const pathname = usePathname(); // Use usePathname to get current path
     const activeId = useScrollSpy(
         siteConfig.header.links
             .filter(({ id }) => id)
@@ -65,7 +65,7 @@ const Navigation: React.FC = () => {
                         isActive={
                             !!(
                                 (id && activeId === id) ||
-                                (href && !!router.asPath.match(new RegExp(href)))
+                                (href && !!pathname.match(new RegExp(href)))
                             )
                         }
                         {...props}

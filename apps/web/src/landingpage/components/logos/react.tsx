@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react'
 import * as React from 'react'
 
-export const ReactLogo = (props) => {
+export const ReactLogo: React.FC<React.SVGProps<SVGSVGElement>> = (props) =>{
   return (
     <svg
       version="1.1"

@@ -18,18 +18,22 @@ const siteConfig = {
       {
         id: 'opportunities',
         label: 'Opportunities',
+        href: '#opportunities', // Added href
       },
       {
         id: 'how-it-works',
         label: 'How It Works',
+        href: '#how-it-works', // Added href
       },
       {
         id: 'use-benefits',
-        label: 'Benefits'
+        label: 'Benefits',
+        href: '#use-benefits', // Added href
       },
       {
         id: 'faq',
         label: 'FAQ',
+        href: '#faq', // Added href
       },
       {
         label: 'Connect with OCID',

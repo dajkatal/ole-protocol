@@ -1,6 +1,13 @@
 // @ts-ignore
 import { useOCAuth } from '@opencampus/ocid-connect-js';
 
+const dummyUser = {
+    id: 'dummyUserId',
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    token: 'dummyToken123',
+};
+
 export const useAuth = () => {
     const { authState, ocAuth } = useOCAuth();
 
@@ -36,5 +43,6 @@ export const useAuth = () => {
         isLoggingIn,
         ocAuth, // Expose ocAuth if needed for login/logout actions
         logOut, // Expose the custom logout function
+        user: dummyUser
     };
 };
