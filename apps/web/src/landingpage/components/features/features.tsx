@@ -89,7 +89,7 @@ export const Features: React.FC<FeaturesProps> = (props) => {
     ...rest
   } = props
 
-  const align = !!aside ? 'left' : alignProp
+  const align = aside ? 'left' : alignProp;
 
   const ip = align === 'left' ? 'left' : 'top'
 

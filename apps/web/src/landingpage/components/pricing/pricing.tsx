@@ -82,7 +82,7 @@ export const Pricing: React.FC<PricingProps> = (props) => {
   );
 };
 
-const PricingFeatures: React.FC<React.PropsWithChildren<{}>> = ({
+const PricingFeatures: React.FC<React.PropsWithChildren<React.ReactNode>> = ({
   children,
 }) => {
   return (

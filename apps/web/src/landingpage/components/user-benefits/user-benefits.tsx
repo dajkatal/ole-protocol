@@ -84,7 +84,7 @@ const UserBox: React.FC<UserBoxProps> = (props) => {
     );
 };
 
-const UserFeatures: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+const UserFeatures: React.FC<React.PropsWithChildren<React.ReactNode>> = ({ children }) => {
     return (
         <VStack align="stretch" justifyContent="stretch" spacing="4" mb="8" mt="2" flex="1">
             {children}
