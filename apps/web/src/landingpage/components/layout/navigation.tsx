@@ -10,7 +10,7 @@ import { MobileNavContent } from "src/landingpage/components/mobile-nav";
 import { useDisclosure, useUpdateEffect } from "@chakra-ui/react";
 
 // @ts-ignore
-import { useOCAuth } from '@opencampus/ocid-connect-js';  // Import useOCAuth
+import {useAuth} from "@app/features/common/hooks/use-auth";  // Import useOCAuth
 
 const Navigation: React.FC = () => {
     const mobileNav = useDisclosure();
@@ -31,15 +31,8 @@ const Navigation: React.FC = () => {
     }, [mobileNav.isOpen]);
 
     // Use OC Auth hook
-    const { ocAuth } = useOCAuth();
+    const { logIn, ocAuth } = useAuth();
 
-    const handleLogin = async () => {
-        try {
-            await ocAuth.signInWithRedirect({ state: 'opencampus' });
-        } catch (error) {
-            console.error('Login error:', error);
-        }
-    };
 
     return (
         <HStack spacing="2" flexShrink={0}>
@@ -50,7 +43,7 @@ const Navigation: React.FC = () => {
                         <Button
                             key={i}
                             variant={variant}
-                            onClick={handleLogin}  // Assign the login function to the onClick
+                            onClick={logIn}  // Assign the login function to the onClick
                         >
                             {label}
                         </Button>

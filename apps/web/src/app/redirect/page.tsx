@@ -8,7 +8,7 @@ export default function RedirectPage() {
     const router = useRouter();
 
     const loginSuccess = () => {
-        router.push('/'); // Redirect after successful login
+        router.push('/dashboard'); // Redirect after successful login
     };
 
     const loginError = (error: Error) => {

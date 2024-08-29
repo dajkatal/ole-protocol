@@ -7,7 +7,9 @@ import { HomePage as MarketingHomePage } from 'marketing/pages/home'
 import { HomePage } from '@app/features/organizations/pages/home'
 
 export const IndexPage = () => {
-  const { isAuthenticated, isLoggingIn } = useAuth()
+  const { isAuthenticated, isLoggingIn } = useAuth();
+
+  console.log(isAuthenticated, isLoggingIn);
 
   if (isLoggingIn) {
     return (

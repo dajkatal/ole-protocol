@@ -1,99 +1,107 @@
-import { FormEvent, useRef } from 'react'
-
-import * as z from 'zod'
-import { InputLeftElement, Text } from '@chakra-ui/react'
-import { useSessionStorageValue } from '@react-hookz/web'
+import { FormEvent, useRef } from 'react';
+import * as z from 'zod';
+import { InputLeftElement, Text, SimpleGrid, Input } from '@chakra-ui/react';
+import { useSessionStorageValue } from '@react-hookz/web';
 import {
-  Field,
-  FormLayout,
-  UseFormReturn,
-  useSnackbar,
-  useStepperContext,
-} from '@saas-ui/react'
-import { useMutation } from '@tanstack/react-query'
-import slug from 'slug'
+    Field,
+    FormLayout,
+    UseFormReturn,
+    useSnackbar,
+    useStepperContext,
+} from '@saas-ui/react';
+import { useMutation } from '@tanstack/react-query';
+import slug from 'slug';
 
-import { createOrganization } from '@api/client'
-
-import { OnboardingStep } from './onboarding-step'
+import { createOrganization } from '@api/client';
+import { OnboardingStep } from './onboarding-step';
+import { useUserRegistration } from '@app/features/common/hooks/use-user-registration';
+import { useRouter } from 'next/navigation';
+import {useAuth} from "@app/features/common/hooks/use-auth"; // Import router for navigation
 
 const schema = z.object({
-  name: z
-    .string()
-    .min(1, 'Please enter your organization name.')
-    .min(2, 'Please choose a name with at least 3 characters.')
-    .max(50, 'The organization name should be no longer than 50 characters.')
-    .describe('Name'),
-  slug: z.string(),
-})
+    fname: z.string().min(1, 'Please enter your first name.'),
+    lname: z.string().min(1, 'Please enter your last name.'),
+    dob: z.string().nonempty('Please enter your date of birth.').describe('Date of Birth'),
+});
 
-type FormInput = z.infer<typeof schema>
+type FormInput = z.infer<typeof schema>;
 
 export const CreateOrganizationStep = () => {
-  const stepper = useStepperContext()
-  const snackbar = useSnackbar()
+    const stepper = useStepperContext();
+    const snackbar = useSnackbar();
+    const router = useRouter(); // Initialize router for navigation
 
-  const workspace = useSessionStorageValue('getting-started.workspace')
+    const workspace = useSessionStorageValue('getting-started.workspace');
+    const formRef = useRef<UseFormReturn<FormInput>>(null);
 
-  const formRef = useRef<UseFormReturn<FormInput>>(null)
+    const {username} = useAuth();
 
-  const { mutateAsync } = useMutation({
-    mutationFn: createOrganization,
-  })
+    const { setRegistrationStatus } = useUserRegistration(username); // Use a default user identifier for now
 
-  return (
-    <OnboardingStep
-      schema={schema}
-      formRef={formRef}
-      title="Create a new organization"
-      description="Saas UI is multi-tenant and supports workspaces with multiple teams."
-      defaultValues={{ name: '', slug: '' }}
-      onSubmit={async (data) => {
-        try {
-          const result = await mutateAsync({ name: data.name })
-          if (result.createOrganization?.slug) {
-            workspace.set(result.createOrganization.slug)
-            stepper.nextStep()
-          }
-        } catch {
-          snackbar.error('Failed to create your organization.')
-        }
-      }}
-      submitLabel="Create organization"
-    >
-      <FormLayout>
-        <Field
-          name="name"
-          label="Organization name"
-          autoFocus
-          rules={{ required: true }}
-          data-1p-ignore
-          onChange={(e: FormEvent<HTMLInputElement>) => {
-            const value = e.currentTarget.value
-            formRef.current?.setValue('name', value)
-            formRef.current?.setValue('slug', slug(value))
-          }}
-        />
-        <Field
-          name="slug"
-          label="Organization URL"
-          paddingLeft="140px"
-          leftAddon={
-            <InputLeftElement
-              bg="transparent"
-              width="auto"
-              ps="3"
-              pointerEvents="none"
-            >
-              <Text color="muted">https://saas-ui.dev/</Text>
-            </InputLeftElement>
-          }
-          rules={{
-            required: true,
-            pattern: /^[a-z0-9-]+$/,
-          }}
-        />
-      </FormLayout>
-    </OnboardingStep>
-  )
-}
+    const { mutateAsync } = useMutation({
+        mutationFn: createOrganization,
+    });
+
+    return (
+        <OnboardingStep
+            schema={schema}
+            formRef={formRef}
+            title="Welcome to the OLE Protocol"
+            description="To get started, we just need a few details from you to set up your account"
+            defaultValues={{ fname: '', lname: '', dob: '' }}
+            onSubmit={async (data) => {
+                try {
+                    // Store user data in local storage
+                    localStorage.setItem('user', JSON.stringify({
+                        fname: data.fname,
+                        lname: data.lname,
+                        dob: data.dob,
+                    }));
+
+                    // Set registration status to true
+                    setRegistrationStatus(true);
+
+                    // Redirect to dashboard
+                    router.push('/dashboard');
+                } catch (error) {
+                    snackbar.error('Error during setup. Please try again');
+                }
+            }}
+            submitLabel="Get Started"
+        >
+            <FormLayout>
+                <SimpleGrid columns={2} spacing={4}>
+                    <Field
+                        name="fname"
+                        label="First Name"
+                        autoFocus
+                        rules={{ required: true }}
+                        data-1p-ignore
+                        onChange={(e: FormEvent<HTMLInputElement>) => {
+                            const value = e.currentTarget.value;
+                            formRef.current?.setValue('fname', value);
+                        }}
+                    />
+                    <Field
+                        name="lname"
+                        label="Last Name"
+                        rules={{ required: true }}
+                        data-1p-ignore
+                        onChange={(e: FormEvent<HTMLInputElement>) => {
+                            const value = e.currentTarget.value;
+                            formRef.current?.setValue('lname', value);
+                        }}
+                    />
+                </SimpleGrid>
+                <Field
+                    name="dob"
+                    label="Date of Birth"
+                    rules={{ required: 'Please enter your date of birth.' }}
+                    as={Input}
+                    type="date" // Use date input type for date picker
+                    placeholder="Select Date of Birth"
+                />
+            </FormLayout>
+        </OnboardingStep>
+    );
+};

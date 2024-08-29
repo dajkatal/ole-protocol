@@ -4,9 +4,7 @@ import { IndexPage } from './index'
 
 const { Page, metadata } = createPage({
   title: 'Home',
-  renderComponent: () => {
-    return <IndexPage />
-  },
+  renderComponent: IndexPage
 })
 
 export { metadata }

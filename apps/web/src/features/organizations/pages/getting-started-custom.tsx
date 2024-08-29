@@ -31,44 +31,12 @@ export const GettingStartedPage: React.FC = () => {
       <Container maxW="container.md">
         <Center minH="$100vh">
           <Steps variant="dots" flexDirection="column-reverse" width="full">
-            <StepsItem title="Create organization">
+            <StepsItem title="Welcome to the OLE Protocol">
               <CreateOrganizationStep />
             </StepsItem>
-            <StepsItem title="Choose your style">
-              <AppearanceStep />
-            </StepsItem>
-            <StepsItem title="Invite team members">
-              <InviteTeamMembersStep />
-            </StepsItem>
-            <StepsItem title="Subscribe to updates">
-              <SubscribeStep />
-            </StepsItem>
-
-            <StepsCompleted>
-              <OnboardingCompleted />
-            </StepsCompleted>
           </Steps>
         </Center>
       </Container>
     </OnboardingPage>
-  )
-}
-
-const OnboardingCompleted = () => {
-  const router = useRouter()
-  const workspace = useSessionStorageValue('getting-started.workspace')
-
-  React.useEffect(() => {
-    router.push(`/${workspace.value}`)
-  }, [])
-
-  return (
-    <LoadingOverlay
-      variant="overlay"
-      bg="chakra-body-bg"
-      _dark={{ bg: 'chakra-body-bg' }}
-    >
-      <LoadingSpinner />
-    </LoadingOverlay>
   )
 }

@@ -54,7 +54,6 @@ import {
 } from '@ui/lib'
 
 import { useCurrentUser } from '../hooks/use-current-user'
-import { BillingStatus } from './billing-status'
 import { GlobalSearchInput } from './global-search-input'
 import { UserMenu } from './user-menu'
 import { WorkspacesMenu } from './workspaces-menu'
@@ -163,7 +162,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
           </SidebarSection>
         ) : (
           <SidebarSection>
-            <BillingStatus />
+            Hello
           </SidebarSection>
         )}
 

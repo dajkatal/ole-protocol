@@ -65,7 +65,7 @@ export const Header = (props: HeaderProps) => {
             <Logo />
             {/* Add Text next to the logo */}
             <Text ml="2" fontWeight="bold" fontSize="xl">
-              the OLE Protocol
+              The OLE Protocol
               {/* <Badge
                     borderRadius="5" // Makes the edges rounded
                     px="1.5" // Adds padding on the left and right

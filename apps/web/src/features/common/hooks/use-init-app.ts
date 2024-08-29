@@ -1,6 +1,5 @@
 import * as React from 'react'
 
-import { BillingStatus } from '@saas-ui-pro/billing'
 import { useFeatures } from '@saas-ui-pro/feature-flags'
 import { useAuth } from 'src/features/common/hooks/use-auth'
 import { useQueries } from '@tanstack/react-query'
@@ -63,7 +62,7 @@ export const useInitApp = () => {
   const billing = React.useMemo(() => {
     return {
       plans: plans,
-      status: subscription?.status as BillingStatus,
+      status: "Good",
       planId: subscription?.plan,
       startedAt: subscription?.startedAt
         ? parseISO(subscription.startedAt)
