@@ -85,8 +85,8 @@ export function DashboardPage() {
     if (!isLoading && !organization) {
         return (
             <ErrorPage
-                title="No organization found"
-                description={`We couldn't find a organization named ${workspace}`}
+                title="Something went wrong"
+                description={`We're not sure what happened! Please reload and try again.`}
             />
         )
     }

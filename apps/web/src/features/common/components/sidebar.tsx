@@ -16,6 +16,7 @@ import {
   Resizer,
 } from '@saas-ui-pro/react'
 import {
+  Link,
   NavGroup,
   NavItem,
   NavItemProps,
@@ -88,7 +89,9 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
         <SidebarToggleButton />
         <ElectronNav />
         <SidebarSection direction="row">
-          <Logo width={'30px'} compact={isCompact} />
+          <Link href={'/'}>
+            <Logo width={'30px'} compact={isCompact} />
+          </Link>
           {!isCompact && (
             <>
               <Spacer />
@@ -107,17 +110,18 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
           <NavGroup>
             <AppSidebarLink
               href={usePath()}
+              isActive={useActivePath('dashboard', { end: false })}
               label="Dashboard"
               icon={<FiHome />}
               hotkey="navigation.dashboard"
             />
             <AppSidebarLink
-              href={usePath('inbox')}
-              isActive={useActivePath('inbox', { end: false })}
-              label="Inbox"
+              href={usePath('request')}
+              isActive={useActivePath('request', { end: false })}
+              label="Request Loan"
               badge={2}
               icon={<FiInbox />}
-              hotkey="navigation.inbox"
+              hotkey="navigation.request"
             />
             <AppSidebarLink
               href={usePath('contacts')}

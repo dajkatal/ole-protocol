@@ -34,7 +34,10 @@ export const UserMenu = () => {
     queryFn: () => getCurrentUser(),
   })
 
-  currentUser.name = fullName;
+  // Check if currentUser is defined before setting currentUser.name
+  if (currentUser) {
+    currentUser.name = fullName;
+  }
 
   const queryClient = useQueryClient()
 
