@@ -11,7 +11,7 @@ import { Provider } from './provider'
 export const metadata: Metadata = {
   title: {
     template: '%s | Saas UI',
-    default: 'Saas UI',
+    default: 'OLE Protocol',
   },
   icons: {
     icon: '/favicons/favicon-32x32.png',

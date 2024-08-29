@@ -8,10 +8,11 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
-import Navigation from './navigation'
-import { Logo } from './logo'
+import { Badge } from '@chakra-ui/react'
 import { useScroll } from 'framer-motion'
-import { Badge } from '@chakra-ui/react';
+
+import { Logo } from './logo'
+import Navigation from './navigation'
 
 export interface HeaderProps extends Omit<BoxProps, 'children'> {}
 
@@ -28,44 +29,44 @@ export const Header = (props: HeaderProps) => {
   const bg = useColorModeValue('whiteAlpha.700', 'rgba(29, 32, 37, 0.7)')
 
   return (
-      <Box
-          ref={ref}
-          as="header"
-          top="0"
-          w="full"
-          position="fixed"
-          backdropFilter="blur(5px)"
-          zIndex="sticky"
-          borderColor="whiteAlpha.100"
-          transitionProperty="common"
-          transitionDuration="normal"
-          bg={y > height ? bg : ''}
-          boxShadow={y > height ? 'md' : ''}
-          borderBottomWidth={y > height ? '1px' : ''}
-          {...props}
-      >
-        <Container maxW="container.2xl" px="8" py="4">
-          <Flex width="full" align="center" justify="space-between">
-            {/* Wrap Logo and Text inside a Box or Flex */}
-            <Flex
-                align="center"
-                cursor="pointer" // Ensure cursor changes to pointer on hover
-                onClick={(e) => {
-                  if (window.location.pathname === '/') {
-                    e.preventDefault()
+    <Box
+      ref={ref}
+      as="header"
+      top="0"
+      w="full"
+      position="fixed"
+      backdropFilter="blur(5px)"
+      zIndex="sticky"
+      borderColor="whiteAlpha.100"
+      transitionProperty="common"
+      transitionDuration="normal"
+      bg={y > height ? bg : ''}
+      boxShadow={y > height ? 'md' : ''}
+      borderBottomWidth={y > height ? '1px' : ''}
+      {...props}
+    >
+      <Container maxW="container.2xl" px="8" py="4">
+        <Flex width="full" align="center" justify="space-between">
+          {/* Wrap Logo and Text inside a Box or Flex */}
+          <Flex
+            align="center"
+            cursor="pointer" // Ensure cursor changes to pointer on hover
+            onClick={(e) => {
+              if (window.location.pathname === '/') {
+                e.preventDefault()
 
-                    window.scrollTo({
-                      top: 0,
-                      behavior: 'smooth',
-                    })
-                  }
-                }}
-            >
-              <Logo />
-              {/* Add Text next to the logo */}
-              <Text ml="2" fontWeight="bold" fontSize="xl">
-                Open Lending
-                <Badge
+                window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth',
+                })
+              }
+            }}
+          >
+            <Logo />
+            {/* Add Text next to the logo */}
+            <Text ml="2" fontWeight="bold" fontSize="xl">
+              the OLE Protocol
+              {/* <Badge
                     borderRadius="5" // Makes the edges rounded
                     px="1.5" // Adds padding on the left and right
                     py="1" // Adds padding on the top and bottom
@@ -76,12 +77,12 @@ export const Header = (props: HeaderProps) => {
                     textTransform="none"
                 >
                   For Education
-                </Badge>
-              </Text>
-            </Flex>
-            <Navigation />
+                </Badge> */}
+            </Text>
           </Flex>
-        </Container>
-      </Box>
+          <Navigation />
+        </Flex>
+      </Container>
+    </Box>
   )
 }
