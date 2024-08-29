@@ -6,7 +6,7 @@ import { LoadingOverlay, LoadingSpinner } from '@saas-ui/react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@app/features/common/hooks/use-auth";
 import { useUserRegistration } from "@app/features/common/hooks/use-user-registration";
-import DashboardPage from "./dashboard-page";
+import { DashboardPage } from "./dashboard-page";
 
 export const HomePageCustom: React.FC = () => {
     const router = useRouter();
@@ -17,6 +17,7 @@ export const HomePageCustom: React.FC = () => {
 
     // Effect to handle redirection based on authentication and registration
     React.useEffect(() => {
+        console.log(isLoading, isAuthenticated, username);
         if (!isLoading && !isAuthenticated) {
             router.push('/');
         } else if (isAuthenticated && !isRegistered) {

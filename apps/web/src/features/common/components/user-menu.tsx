@@ -24,10 +24,17 @@ import { usePath } from '../hooks/use-path'
 export const UserMenu = () => {
   const { logOut } = useAuth()
 
+  const storedUser = localStorage.getItem('user');
+  const userData = JSON.parse(storedUser);
+  // Combine fname and lname to create the full name
+  const fullName = `${userData.fname} ${userData.lname}`;
+
   const { data: { currentUser } = {} } = useQuery({
     queryKey: ['GetCurrentUser'],
     queryFn: () => getCurrentUser(),
   })
+
+  currentUser.name = fullName;
 
   const queryClient = useQueryClient()
 
@@ -81,11 +88,9 @@ export const UserMenu = () => {
             </Has>
           </MenuGroup>
           <MenuDivider />
-          <MenuItem>Changelog</MenuItem>
           <MenuItem command={helpCommand} onClick={() => help.open()}>
             Help
           </MenuItem>
-          <MenuItem>Feedback</MenuItem>
           <MenuItem
             onClick={(e: React.MouseEvent) => {
               e.preventDefault()

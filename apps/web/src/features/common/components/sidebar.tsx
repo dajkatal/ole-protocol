@@ -57,6 +57,7 @@ import { useCurrentUser } from '../hooks/use-current-user'
 import { GlobalSearchInput } from './global-search-input'
 import { UserMenu } from './user-menu'
 import { WorkspacesMenu } from './workspaces-menu'
+import {Logo} from "../../../landingpage/data/logo";
 
 export interface AppSidebarProps extends SidebarProps {}
 
@@ -87,7 +88,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
         <SidebarToggleButton />
         <ElectronNav />
         <SidebarSection direction="row">
-          <WorkspacesMenu compact={isCompact} />
+          <Logo width={'30px'} compact={isCompact} />
           {!isCompact && (
             <>
               <Spacer />
@@ -162,7 +163,6 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
           </SidebarSection>
         ) : (
           <SidebarSection>
-            Hello
           </SidebarSection>
         )}
 

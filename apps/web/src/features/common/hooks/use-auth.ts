@@ -52,10 +52,6 @@ export const useAuth = () => {
         setIsLoading(false);
     };
 
-    useEffect(() => {
-        initializeAuthState();
-    }, [authState]);
-
     // Safely parse user data from localStorage
     const getUserFromLocalStorage = () => {
         const user = localStorage.getItem('user');
