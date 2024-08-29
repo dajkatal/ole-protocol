@@ -116,8 +116,8 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
               hotkey="navigation.dashboard"
             />
             <AppSidebarLink
-              href={usePath('request')}
-              isActive={useActivePath('request', { end: false })}
+              href={usePath('dashboard/request')}
+              isActive={useActivePath('dashboard/request', { end: false })}
               label="Request Loan"
               badge={2}
               icon={<FiInbox />}

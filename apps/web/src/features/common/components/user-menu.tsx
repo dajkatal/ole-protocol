@@ -22,12 +22,12 @@ import { useHelpCenter } from '@ui/lib'
 import { usePath } from '../hooks/use-path'
 
 export const UserMenu = () => {
-  const { logOut } = useAuth()
+  const { username, logOut } = useAuth()
 
   const storedUser = localStorage.getItem('user');
   const userData = JSON.parse(storedUser);
   // Combine fname and lname to create the full name
-  const fullName = `${userData.fname} ${userData.lname}`;
+  const fullName = `${userData.fname} ${userData.lname} (${username})`;
 
   const { data: { currentUser } = {} } = useQuery({
     queryKey: ['GetCurrentUser'],
@@ -64,8 +64,8 @@ export const UserMenu = () => {
         icon={
           <PersonaAvatar
             size="xs"
-            name={currentUser?.name || ''}
-            src={currentUser?.avatar || undefined}
+            name={`${userData.fname} ${userData.lname}` || ''}
+            bg="white"
           />
         }
         variant="ghost"
