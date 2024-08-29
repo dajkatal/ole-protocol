@@ -33,7 +33,6 @@ const nextConfig = {
   reactStrictMode: false,
   distDir: isElectron ? '.nextron' : '.next',
   transpilePackages: ['@saas-ui/date-picker'],
-  //output: 'standalone',
   eslint: {
     ignoreDuringBuilds: true,
   },
