@@ -15,19 +15,24 @@ import { Link } from '@saas-ui/react';
 export interface OnboardingPageProps {
   isLoading?: boolean;
   hideBackButton?: boolean;
+  returnHome?: boolean;
   children: React.ReactNode;
 }
 
 export const OnboardingPage: React.FC<OnboardingPageProps> = (props) => {
-  const { hideBackButton, children, ...pageProps } = props;
+  const { hideBackButton, returnHome= false, children, ...pageProps } = props;
   const { username, logOut } = useAuth();
 
   const nav = (
       <HStack>
-        {!hideBackButton && (
+        {!hideBackButton && !returnHome && (
             // Update BackButton to use onClick for logout
             <BackButton onClick={logOut} />
         )}
+          {!hideBackButton && returnHome && (
+              // Update BackButton to use onClick for logout
+              <BackButton href="/dashboard" />
+          )}
         <Menu>
           <MenuButton
               as={Button}

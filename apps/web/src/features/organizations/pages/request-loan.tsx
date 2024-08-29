@@ -14,7 +14,7 @@ import { FinancialInformationStep } from '../components/onboarding/financial-inf
 export const RequestLoan: React.FC = () => {
 
   return (
-      <OnboardingPage isLoading={false}>
+      <OnboardingPage isLoading={false} returnHome={true}>
         <Container maxW="container.md">
           <Center minH="$100vh">
             <Steps variant="dots" flexDirection="column-reverse" width="full">
