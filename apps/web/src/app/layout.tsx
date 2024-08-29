@@ -3,8 +3,10 @@ import * as React from 'react'
 import { ColorModeScript } from '@chakra-ui/react'
 import '@fontsource-variable/inter'
 import { Metadata } from 'next'
+import App from 'next/app'
 import { cookies } from 'next/headers'
 
+import { AppKit } from '../landingpage/components/context/web3modal'
 import { LemonSqueezyScript } from '../lib/lemonsqueezy'
 import { Provider } from './provider'
 
@@ -32,9 +34,11 @@ export default async function AppRootLayout({
   return (
     <html data-theme={colorMode} style={{ colorScheme: colorMode }}>
       <body className={`chakra-ui-${colorMode}`}>
-        <LemonSqueezyScript />
-        <ColorModeScript initialColorMode={colorMode} type="cookie" />
-        <Provider>{children}</Provider>
+        <AppKit>
+          <LemonSqueezyScript />
+          <ColorModeScript initialColorMode={colorMode} type="cookie" />
+          <Provider>{children}</Provider>
+        </AppKit>
       </body>
     </html>
   )
