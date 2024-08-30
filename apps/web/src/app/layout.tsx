@@ -12,7 +12,7 @@ import { Provider } from './provider'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Saas UI',
+    template: '%s | OLE Protocol',
     default: 'OLE Protocol',
   },
   icons: {
