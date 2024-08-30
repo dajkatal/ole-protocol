@@ -7,6 +7,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract OLEProtocol is Ownable, ReentrancyGuard {
     IERC20 public usdtToken;
+    
+    uint256 public constant EDU_TO_USDT_RATE = 5000; // 1 EDU = 5000 USDT
+    uint256 public constant COLLATERAL_RATIO = 120; // 120% overcollateralization
+    uint256 public constant BASE_APY = 1000; // 10% APY
 
     struct Loan {
         address borrower;
@@ -18,14 +22,13 @@ contract OLEProtocol is Ownable, ReentrancyGuard {
         bool fulfilled;
         address lender;
         uint256 startTime;
+        string borrowerOCID;
+        string lenderOCID;
     }
 
     Loan[] public loans;
     mapping(address => uint256[]) public userLoans;
     mapping(address => uint256[]) public userSupplies;
-
-    uint256 public constant COLLATERAL_RATIO = 120; // 120% overcollateralization
-    uint256 public constant BASE_APY = 1000; // 10% APY
 
     constructor(address _usdtToken) Ownable(msg.sender) {
         usdtToken = IERC20(_usdtToken);
@@ -59,36 +62,40 @@ contract OLEProtocol is Ownable, ReentrancyGuard {
         return availableLoans;
     }
 
-    function requestLoan(uint256 amount, uint256 duration, string memory reason) external payable nonReentrant {
+    function requestLoan(uint256 amount, uint256 duration, string memory reason, string memory borrowerOCID) external payable nonReentrant {
         require(amount > 0, "Loan amount must be greater than 0");
         require(duration > 0, "Loan duration must be greater than 0");
 
-        uint256 collateralAmount = (amount * COLLATERAL_RATIO) / 100;
+        // Calculate the collateral amount in USDT, then convert it to EDU
+        uint256 collateralAmountInUSDT = (amount * COLLATERAL_RATIO) / 100;
+        uint256 collateralAmountInEDU = collateralAmountInUSDT / EDU_TO_USDT_RATE;
         uint256 apy = BASE_APY;
 
-        require(msg.value >= collateralAmount, "Insufficient collateral");
+        require(msg.value >= collateralAmountInEDU, "Insufficient collateral");
 
         loans.push(Loan({
             borrower: msg.sender,
             amount: amount,
-            collateral: collateralAmount,
+            collateral: collateralAmountInEDU,
             duration: duration,
             apy: apy,
             reason: reason,
             fulfilled: false,
             lender: address(0),
-            startTime: 0
+            startTime: 0,
+            borrowerOCID: borrowerOCID,
+            lenderOCID: ""
         }));
 
         userLoans[msg.sender].push(loans.length - 1);
 
-        // Refund excess collateral
-        if (msg.value > collateralAmount) {
-            payable(msg.sender).transfer(msg.value - collateralAmount);
+        // Refund excess collateral in EDU
+        if (msg.value > collateralAmountInEDU) {
+            payable(msg.sender).transfer(msg.value - collateralAmountInEDU);
         }
     }
 
-    function supplyLoan(uint256 loanId) external nonReentrant {
+    function supplyLoan(uint256 loanId, string memory lenderOCID) external nonReentrant {
         require(loanId < loans.length, "Invalid loan ID");
         Loan storage loan = loans[loanId];
         require(!loan.fulfilled, "Loan already fulfilled");
@@ -97,6 +104,7 @@ contract OLEProtocol is Ownable, ReentrancyGuard {
         loan.fulfilled = true;
         loan.lender = msg.sender;
         loan.startTime = block.timestamp;
+        loan.lenderOCID = lenderOCID;
 
         userSupplies[msg.sender].push(loanId);
     }
@@ -113,7 +121,7 @@ contract OLEProtocol is Ownable, ReentrancyGuard {
 
         require(usdtToken.transferFrom(msg.sender, loan.lender, totalRepayment), "USDT transfer failed");
         
-        // Return collateral
+        // Return collateral in EDU
         payable(msg.sender).transfer(loan.collateral);
 
         // Remove the loan from userLoans and userSupplies

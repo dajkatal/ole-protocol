@@ -18,6 +18,7 @@ import { BigNumberish, ethers } from 'ethers'
 interface LoanData {
   id: number
   borrower: string
+  borrowerOCID: string
   amount: BigNumberish
   collateral: BigNumberish
   duration: number
