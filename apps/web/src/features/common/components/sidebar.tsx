@@ -90,7 +90,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
         <ElectronNav />
         <SidebarSection direction="row">
           <Link href={'/'}>
-            <Logo width={'30px'} compact={isCompact} />
+            <Logo width={'80px'} compact={isCompact} />
           </Link>
           {!isCompact && (
             <>
@@ -129,6 +129,13 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
               label="Request Loan"
               icon={<FiInbox />}
               hotkey="navigation.request"
+            />
+            <AppSidebarLink
+                href={usePath('dashboard/my-impact')}
+                isActive={useActivePath('impact', { end: true })}
+                label="My Impact"
+                icon={<FiHome />}
+                hotkey="navigation.dashboard"
             />
           </NavGroup>
 

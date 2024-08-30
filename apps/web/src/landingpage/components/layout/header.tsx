@@ -62,22 +62,13 @@ export const Header = (props: HeaderProps) => {
               }
             }}
           >
-            <Logo />
-            {/* Add Text next to the logo */}
-            <Text ml="2" fontWeight="bold" fontSize="xl">
-              The OLE Protocol
-              {/* <Badge
-                    borderRadius="5" // Makes the edges rounded
-                    px="1.5" // Adds padding on the left and right
-                    py="1" // Adds padding on the top and bottom
-                    ml={2}
-                    colorScheme="primary" // Sets the color scheme (can be changed to any color like 'green', 'red', etc.)
-                    fontSize="10" // Sets the font size
-                    variant='outline'
-                    textTransform="none"
-                >
-                  For Education
-                </Badge> */}
+            <Text ml="2" fontWeight="bold" fontSize="xl" display="flex" alignItems="center">
+              The
+              {/* Wrap the logo in a Box with inline styling for proper alignment */}
+              <Box as="span" mx="1">
+                <Logo width="24px" height="24px" /> {/* Adjust width and height as needed */}
+              </Box>
+              Protocol
             </Text>
           </Flex>
           <Navigation />
