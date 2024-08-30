@@ -45,6 +45,8 @@ import { IntroTour } from '../features/organizations/components/intro-tour'
 import { generateMockData } from './mockData'
 import {Metric} from "@app/features/organizations/components/metrics/metric";
 import {RevenueChart} from "@app/features/organizations/components/metrics/revenue-chart";
+import Leaderboard from "./leaderboard";
+import YourOcImpact from "./your-oc-impact";
 
 const { mockDataRequested, mockDataSupplied } = generateMockData()
 
@@ -192,7 +194,7 @@ export function DashboardPage() {
                     pb="8"
                 >
                     {/* First row statistics */}
-                    <GridItem colSpan={{ base: 1, lg: 2 }}>
+                    <GridItem colSpan={{ base: 1, lg: 3 }}>
                         <Card>
                             <Tabs variant="unstyled" tabIndex={0}>
                                 <TabList
@@ -318,6 +320,12 @@ export function DashboardPage() {
                                 </TabPanels>
                             </Tabs>
                         </Card>
+                    </GridItem>
+                    <GridItem colSpan={{ base: 1, lg: 2 }}>
+                        <Leaderboard />
+                    </GridItem>
+                    <GridItem colSpan={{ base: 1, lg: 1 }}>
+                        <YourOcImpact />
                     </GridItem>
                 </Grid>
             </PageBody>

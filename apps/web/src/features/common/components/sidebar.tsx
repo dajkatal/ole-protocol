@@ -130,13 +130,6 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
               icon={<FiInbox />}
               hotkey="navigation.request"
             />
-            <AppSidebarLink
-                href={usePath('dashboard/my-impact')}
-                isActive={useActivePath('impact', { end: true })}
-                label="My Impact"
-                icon={<FiHome />}
-                hotkey="navigation.dashboard"
-            />
           </NavGroup>
 
           {/* {!isCompact && user && <AppSidebarTags user={user} />} */}

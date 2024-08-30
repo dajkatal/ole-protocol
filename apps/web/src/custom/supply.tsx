@@ -39,19 +39,75 @@ import oleABI from '../../../../contracts/oleprotocolabi.json'
 import { NavBar } from '../features/common/components/navbar'
 import { MetricsCard } from '../features/organizations/components/metrics/metrics-card'
 
-const contractAddress = '0x622d6ddad0298042F3F671A34990bc7dDE47ea4B'
-const USDTAddress = '0xF79E7D0C6B73C277553C6fAC7277Fc0362953Ad7'
-const USDTAbi = [
-  'function approve(address spender, uint256 amount) public returns (bool)',
-  'function balanceOf(address) view returns (uint)',
-]
-
+// Imported data from the old code
 const currencyFormatter = (value: number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
   }).format(value)
 }
+
+const numberFormatter = (value: number) => {
+  return new Intl.NumberFormat('en-US').format(value)
+}
+
+const generateSuppliedData = () => {
+  return Array.from({ length: 20 }, (_, i) => ({
+    date: `Week ${i + 1}`,
+    value: Math.floor(Math.random() * (50000 - 10000 + 1)) + 10000,
+  }))
+}
+
+const suppliedData = generateSuppliedData()
+
+const requestedData = suppliedData.map(item => ({
+  date: item.date,
+  value: Math.round(item.value * 1.44),
+}))
+
+const loansRequestedData = [
+  { date: 'Jan 1', value: 2000 },
+  { date: 'Jan 8', value: 2500 },
+  { date: 'Jan 15', value: 2300 },
+  { date: 'Jan 22', value: 2700 },
+  { date: 'Jan 29', value: 4800 },
+  { date: 'Feb 5', value: 1000 },
+  { date: 'Feb 12', value: 4200 },
+  { date: 'Feb 19', value: 3400 },
+  { date: 'Feb 26', value: 2600 },
+  { date: 'Mar 5', value: 2800 },
+  { date: 'Mar 12', value: 2900 },
+  { date: 'Mar 19', value: 4100 },
+  { date: 'Mar 26', value: 3300 },
+  { date: 'Apr 2', value: 3400 },
+  { date: 'Apr 9', value: 2600 },
+  { date: 'Apr 16', value: 3700 },
+  { date: 'Apr 23', value: 5900 },
+  { date: 'Apr 30', value: 5100 },
+  { date: 'May 7', value: 6300 },
+  { date: 'May 14', value: 6500 },
+  { date: 'May 21', value: 6700 },
+  { date: 'May 28', value: 6900 },
+  { date: 'Jun 4', value: 7100 },
+  { date: 'Jun 11', value: 7300 },
+  { date: 'Jun 18', value: 8500 },
+  { date: 'Jun 25', value: 8700 },
+]
+
+const scholarsCreatedData = loansRequestedData.reduce((acc, item, index) => {
+  const previousValue = acc[index - 1]?.value || 300
+  const increment = Math.random() * (1.5 - 0.85) + 0.85
+  const newValue = Math.floor(previousValue * increment)
+  acc.push({ date: item.date, value: newValue })
+  return acc
+}, [] as { date: string, value: number }[])
+
+const contractAddress = '0x622d6ddad0298042F3F671A34990bc7dDE47ea4B'
+const USDTAddress = '0xF79E7D0C6B73C277553C6fAC7277Fc0362953Ad7'
+const USDTAbi = [
+  'function approve(address spender, uint256 amount) public returns (bool)',
+  'function balanceOf(address) view returns (uint)',
+]
 
 interface LoanData {
   id: number
@@ -102,8 +158,8 @@ const FundScholarButton: DataGridCell<LoanData> = ({ row }) => {
 
       // Approve USDT transfer
       const approveTx = await usdtContract.approve(
-        contractAddress,
-        loanData.amount,
+          contractAddress,
+          loanData.amount,
       )
       await approveTx.wait()
 
@@ -134,9 +190,9 @@ const FundScholarButton: DataGridCell<LoanData> = ({ row }) => {
   }
 
   return (
-    <Button colorScheme="blue" onClick={() => handleFundScholar(row.original)}>
-      Fund Scholar
-    </Button>
+      <Button colorScheme="blue" onClick={() => handleFundScholar(row.original)}>
+        Fund Scholar
+      </Button>
   )
 }
 
@@ -191,8 +247,51 @@ const columns: ColumnDef<LoanData>[] = [
   },
 ]
 
+
+const customEaseOut = (t) => {
+  if (t < 0.5) {
+    return 4 * t * t * t; // Quick start
+  } else {
+    const f = (t - 1);
+    return 1 + f * f * f * f * f; // Very slow end
+  }
+};
+
 export function RequestedLoansPage() {
   const [availableLoans, setAvailableLoans] = useState<LoanData[]>([])
+  const [loansRequested, setLoansRequested] = useState(requestedData.reduce((acc, item) => acc + item.value, 0))
+  const [loansSupplied, setLoansSupplied] = useState(suppliedData.reduce((acc, item) => acc + item.value, 0))
+  const [scholarsCreated, setScholarsCreated] = useState(scholarsCreatedData[scholarsCreatedData.length - 1].value)
+
+  useEffect(() => {
+    const requestedTotal = requestedData.reduce((acc, item) => acc + item.value, 0);
+    const suppliedTotal = suppliedData.reduce((acc, item) => acc + item.value, 0);
+    const scholarsTotal = scholarsCreatedData[scholarsCreatedData.length - 1].value;
+
+    const duration = 500; // Animation duration in milliseconds
+    const frameRate = 1000 / 60; // 60 FPS
+    const totalFrames = Math.round(duration / frameRate);
+
+    let currentFrame = 0;
+
+    const animate = () => {
+      currentFrame++;
+      const progress = customEaseOut(currentFrame / totalFrames);
+
+      setLoansRequested(Math.floor(requestedTotal * progress));
+      setLoansSupplied(Math.floor(suppliedTotal * progress));
+      setScholarsCreated(Math.floor(scholarsTotal * progress));
+
+      if (currentFrame < totalFrames) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    animate();
+  }, []);
+
+
+
   const toast = useToast()
   const gridRef = useRef<DataGrid<LoanData>>(null)
 
@@ -227,123 +326,155 @@ export function RequestedLoansPage() {
   }, [fetchAvailableLoans])
 
   const filters = React.useMemo(
-    () => [
-      {
-        id: 'amount',
-        label: 'Loan Amount',
-        type: 'number',
-        operators: ['lessThan', 'moreThan'],
-        defaultOperator: 'lessThan',
-      },
-      {
-        id: 'collateral',
-        label: 'Collateral',
-        type: 'number',
-        operators: ['lessThan', 'moreThan'],
-        defaultOperator: 'moreThan',
-      },
-      {
-        id: 'apy',
-        label: 'APY (%)',
-        type: 'number',
-        operators: ['lessThan', 'moreThan'],
-        defaultOperator: 'moreThan',
-      },
-      {
-        id: 'reason',
-        label: 'Purpose of Loan',
-        type: 'string',
-      },
-      {
-        id: 'duration',
-        label: 'Duration (days)',
-        type: 'number',
-        operators: ['lessThan', 'moreThan'],
-        defaultOperator: 'lessThan',
-      },
-    ],
-    [],
+      () => [
+        {
+          id: 'amount',
+          label: 'Loan Amount',
+          type: 'number',
+          operators: ['lessThan', 'moreThan'],
+          defaultOperator: 'lessThan',
+        },
+        {
+          id: 'collateral',
+          label: 'Collateral',
+          type: 'number',
+          operators: ['lessThan', 'moreThan'],
+          defaultOperator: 'moreThan',
+        },
+        {
+          id: 'apy',
+          label: 'APY (%)',
+          type: 'number',
+          operators: ['lessThan', 'moreThan'],
+          defaultOperator: 'moreThan',
+        },
+        {
+          id: 'reason',
+          label: 'Purpose of Loan',
+          type: 'string',
+        },
+        {
+          id: 'duration',
+          label: 'Duration (days)',
+          type: 'number',
+          operators: ['lessThan', 'moreThan'],
+          defaultOperator: 'lessThan',
+        },
+      ],
+      [],
   )
 
   const onFilter = React.useCallback((filters) => {
     if (gridRef.current) {
       gridRef.current.setColumnFilters(
-        filters.map((filter) => {
-          return {
-            id: filter.id,
-            value: {
-              value: filter.value,
-              operator: filter.operator || 'is',
-            },
-          }
-        }),
+          filters.map((filter) => {
+            return {
+              id: filter.id,
+              value: {
+                value: filter.value,
+                operator: filter.operator || 'is',
+              },
+            }
+          }),
       )
     }
   }, [])
 
-  return (
-    <Page>
-      <PageBody contentWidth="container.2xl" py={8} px={8}>
-        <NavBar />
-        <Grid
-          templateColumns={['repeat(1, 1fr)', null, null, 'repeat(3, 1fr)']}
-          gap={8}
-        >
-          <GridItem>
-            <Card>
-              <CardBody>
-                <Stat>
-                  <StatLabel>Loans Requested</StatLabel>
-                  <StatNumber>{currencyFormatter(100000)}</StatNumber>
-                  <Sparkline data={[]} height="60px" mx="-4" />
-                </Stat>
-              </CardBody>
-            </Card>
-          </GridItem>
+  const renderValue = React.useCallback((context) => {
+    if (context.id === 'amount' || context.id === 'apy' || context.id === 'collateral') {
+      return <ActiveFilterValueInput bg='none' />
+    }
+    return context.value?.toLocaleString()
+  }, [])
 
-          <GridItem colSpan={{ base: 1, lg: 3 }}>
-            <MetricsCard noPadding>
-              <FiltersProvider filters={filters} onChange={onFilter}>
-                <HStack justifyContent="space-between" px={4} py={3}>
-                  <Text fontSize="xl" fontWeight="bold">
-                    Available Loans
-                  </Text>
-                  <Toolbar>
-                    <FiltersAddButton />
-                  </Toolbar>
-                </HStack>
-                <ActiveFiltersList />
-                <DataGrid<LoanData>
-                  columns={columns}
-                  data={availableLoans}
-                  isSortable
-                  stickyHeader={true}
-                  instanceRef={gridRef}
-                  sx={{
-                    td: {
-                      justifyContent: 'left !important',
-                    },
-                    th: {
-                      justifyContent: 'left !important',
-                    },
-                    tfoot: {
-                      display: 'none',
-                    },
-                  }}
-                >
-                  <DataGridPagination
-                    rowsPerPageOptions={[5, 10, 15]}
-                    count={availableLoans.length}
-                    defaultPageSize={10}
-                    sx={{ px: '16px', py: '13px' }}
-                  />
-                </DataGrid>
-              </FiltersProvider>
-            </MetricsCard>
-          </GridItem>
-        </Grid>
-      </PageBody>
-    </Page>
+  return (
+      <Page>
+        <PageBody contentWidth="container.2xl" py={8} px={8}>
+          <NavBar />
+          <Grid
+              templateColumns={['repeat(1, 1fr)', null, null, 'repeat(3, 1fr)']}
+              gap={8}
+          >
+            {/* Updated Stat Elements */}
+            <GridItem>
+              <Card>
+                <CardBody>
+                  <Stat>
+                    <StatLabel>Loans Requested</StatLabel>
+                    <StatNumber>{currencyFormatter(loansRequested)}</StatNumber>
+                    <Sparkline data={requestedData} height="60px" mx="-4" />
+                  </Stat>
+                </CardBody>
+              </Card>
+            </GridItem>
+
+            <GridItem>
+              <Card>
+                <CardBody>
+                  <Stat>
+                    <StatLabel>Loans Supplied</StatLabel>
+                    <StatNumber>{currencyFormatter(loansSupplied)}</StatNumber>
+                    <Sparkline data={suppliedData} height="60px" mx="-4" />
+                  </Stat>
+                </CardBody>
+              </Card>
+            </GridItem>
+
+            <GridItem>
+              <Card>
+                <CardBody>
+                  <Stat>
+                    <StatLabel>Scholars Created</StatLabel>
+                    <StatNumber>{numberFormatter(scholarsCreated)}</StatNumber>
+                    <Sparkline data={scholarsCreatedData} height="60px" mx="-4" />
+                  </Stat>
+                </CardBody>
+              </Card>
+            </GridItem>
+
+            <GridItem colSpan={{ base: 1, lg: 3 }}>
+              <MetricsCard noPadding>
+                <FiltersProvider filters={filters} onChange={onFilter}>
+                  <HStack justifyContent="space-between" px={4} py={3}>
+                    <Text fontSize="xl" fontWeight="bold">
+                      Available Loans
+                    </Text>
+                    <Toolbar>
+                      <FiltersAddButton />
+                    </Toolbar>
+                  </HStack>
+                  <ActiveFiltersList renderValue={renderValue} />
+                  <DataGrid<LoanData>
+                      columns={columns}
+                      data={availableLoans}
+                      isSortable
+                      stickyHeader={true}
+                      instanceRef={gridRef}
+                      sx={{
+                        td: {
+                          justifyContent: 'left !important',
+                        },
+                        th: {
+                          justifyContent: 'left !important',
+                        },
+                        tfoot: {
+                          display: 'none',
+                        },
+                      }}
+                  >
+                    <DataGridPagination
+                        rowsPerPageOptions={[5, 10, 15]}
+                        count={availableLoans.length}
+                        defaultPageSize={10}
+                        sx={{ px: '16px', py: '13px' }}
+                    />
+                  </DataGrid>
+                </FiltersProvider>
+              </MetricsCard>
+            </GridItem>
+          </Grid>
+        </PageBody>
+      </Page>
   )
 }
 
