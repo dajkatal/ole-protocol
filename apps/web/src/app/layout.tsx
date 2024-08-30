@@ -10,6 +10,8 @@ import { AppKit } from '../landingpage/components/context/web3modal'
 import { LemonSqueezyScript } from '../lib/lemonsqueezy'
 import { Provider } from './provider'
 
+import './globals.css'
+
 export const metadata: Metadata = {
   title: {
     template: '%s | OLE Protocol',

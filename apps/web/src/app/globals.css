@@ -1,0 +1,5 @@
+/* Global CSS file or <style> tag */
+
+:root {
+    --wui-border-radius-m: 4px !important; /* Replace 8px with your desired value */
+}
