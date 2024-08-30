@@ -54,11 +54,11 @@ import {
   useModals,
 } from '@ui/lib'
 
+import { Logo } from '../../../landingpage/data/logo'
 import { useCurrentUser } from '../hooks/use-current-user'
 import { GlobalSearchInput } from './global-search-input'
 import { UserMenu } from './user-menu'
 import { WorkspacesMenu } from './workspaces-menu'
-import {Logo} from "../../../landingpage/data/logo";
 
 export interface AppSidebarProps extends SidebarProps {}
 
@@ -116,12 +116,12 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
               hotkey="navigation.dashboard"
             />
             <AppSidebarLink
-                href={usePath('dashboard/supply')}
-                isActive={useActivePath('supply', { end: true })}
-                label="Supply a Loan"
-                badge={23}
-                icon={<FiUsers />}
-                hotkey="navigation.supply"
+              href={usePath('dashboard/supply')}
+              isActive={useActivePath('supply', { end: true })}
+              label="Supply a Loan"
+              badge={23}
+              icon={<FiUsers />}
+              hotkey="navigation.supply"
             />
             <AppSidebarLink
               href={usePath('dashboard/request')}
@@ -132,7 +132,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
             />
           </NavGroup>
 
-          {!isCompact && user && <AppSidebarTags user={user} />}
+          {/* {!isCompact && user && <AppSidebarTags user={user} />} */}
 
           <Spacer />
 
@@ -166,8 +166,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
             <UserMenu />
           </SidebarSection>
         ) : (
-          <SidebarSection>
-          </SidebarSection>
+          <SidebarSection></SidebarSection>
         )}
 
         <SidebarOverlay />
@@ -191,13 +190,9 @@ const AppSidebarLink: React.FC<AppSidebarlink> = (props) => {
 
   const { variant } = useSidebarContext()
 
-  const command = useHotkeysShortcut(
-    hotkey,
-    () => {
-      push(href)
-    },
-    [href],
-  )
+  const command = useHotkeysShortcut(hotkey, () => {
+    push(href)
+  }, [href])
 
   return (
     <NavItem
