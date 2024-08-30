@@ -266,6 +266,8 @@ export function DashboardPage() {
                                             isSortable
                                             stickyHeader={true}
                                             sx={{
+                                                borderRadius: '10px',
+                                                overflow: 'hidden',
                                                 td: {
                                                     justifyContent: 'left !important',
                                                 },
@@ -292,6 +294,8 @@ export function DashboardPage() {
                                             isSortable
                                             stickyHeader={true}
                                             sx={{
+                                                borderRadius: '10px',
+                                                overflow: 'hidden',
                                                 td: {
                                                     justifyContent: 'left !important',
                                                 },
