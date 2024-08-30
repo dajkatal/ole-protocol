@@ -1,10 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-
-import {
-    Grid
-} from '@chakra-ui/react'
+import { Grid } from '@chakra-ui/react'
 import {
     Page,
     PageBody,
@@ -23,11 +20,10 @@ export function DashboardPage() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsLoading(false);
-        }, 1500000); // 1.5 seconds
+        }, 1500); // 1.5 seconds
 
         return () => clearTimeout(timer); // Cleanup the timer
     }, []);
-
 
     const toolbar = (
         <Toolbar className="overview-toolbar" variant="ghost">
@@ -58,7 +54,7 @@ export function DashboardPage() {
                 className="pre-order"
             />
         </Toolbar>
-    )
+    );
 
     return (
         <Page>
@@ -71,11 +67,14 @@ export function DashboardPage() {
                 bg="page-body-bg-subtle"
                 py={{ base: 4, xl: 8 }}
                 px={{ base: 4, xl: 8 }}
+                position="relative" // Ensures the overlay is positioned relative to the content
             >
                 <IntroTour />
-                <LoadingOverlay variant="overlay"
-                                isLoading={isLoading}
-                                color="primary.500"
+                <LoadingOverlay
+                    variant="overlay"
+                    isLoading={isLoading}
+                    color="primary.500"
+                    zIndex={2} // Ensures the overlay appears above other content
                 >
                     <LoadingSpinner />
                 </LoadingOverlay>
@@ -86,9 +85,11 @@ export function DashboardPage() {
                     gap={{ base: 4, xl: 8 }}
                     pb="8"
                 >
-
+                    {/* Your grid content here */}
                 </Grid>
             </PageBody>
         </Page>
     )
 }
+
+export default DashboardPage;
