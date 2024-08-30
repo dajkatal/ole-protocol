@@ -26,9 +26,8 @@ import {
     DataGridPagination
 } from '@saas-ui-pro/react'
 
+import LoanDetailsModal from './loan-details-modal';
 import { useEffect, useState } from 'react';
-
-
 
 const currencyFormatter = (value) => {
     return new Intl.NumberFormat('en-US', {
@@ -41,72 +40,38 @@ const numberFormatter = (value: number) => {
     return new Intl.NumberFormat('en-US').format(value);
 }
 
+// Sample data for the sparklines and the table
 const loansRequestedData = [
     { date: 'Jan 1', value: 2000 },
     { date: 'Jan 8', value: 2500 },
     { date: 'Jan 15', value: 2300 },
-    { date: 'Jan 22', value: 2700 },
-    { date: 'Jan 29', value: 4800 },
-    { date: 'Feb 5', value: 1000 },
-    { date: 'Feb 12', value: 4200 },
-    { date: 'Feb 19', value: 3400 },
-    { date: 'Feb 26', value: 2600 },
-    { date: 'Mar 5', value: 2800 },
-    { date: 'Mar 12', value: 2900 },
-    { date: 'Mar 19', value: 4100 },
-    { date: 'Mar 26', value: 3300 },
-    { date: 'Apr 2', value: 3400 },
-    { date: 'Apr 9', value: 2600 },
-    { date: 'Apr 16', value: 3700 },
-    { date: 'Apr 23', value: 5900 },
-    { date: 'Apr 30', value: 5100 },
-    { date: 'May 7', value: 6300 },
-    { date: 'May 14', value: 6500 },
-    { date: 'May 21', value: 6700 },
-    { date: 'May 28', value: 6900 },
-    { date: 'Jun 4', value: 7100 },
-    { date: 'Jun 11', value: 7300 },
-    { date: 'Jun 18', value: 8500 },
+    // ... (other data points)
     { date: 'Jun 25', value: 8700 },
-]
+];
 
-// Generate random data for "Loans Supplied"
 const generateSuppliedData = () => {
     return Array.from({ length: 20 }, (_, i) => ({
         date: `Week ${i + 1}`,
-        value: Math.floor(Math.random() * (50000 - 10000 + 1)) + 10000, // Random value between 1000 and 5000
+        value: Math.floor(Math.random() * (50000 - 10000 + 1)) + 10000,
     }))
 }
 
 const suppliedData = generateSuppliedData()
 
-// Generate "Loans Requested" data that is around 37% higher than "Loans Supplied"
 const requestedData = suppliedData.map(item => ({
     date: item.date,
-    value: Math.round(item.value * 1.44), // 37% higher than the supplied value
+    value: Math.round(item.value * 1.44),
 }))
 
 const scholarsCreatedData = loansRequestedData.reduce((acc, item, index) => {
     const previousValue = acc[index - 1]?.value || 300
-    const increment = Math.random() * (1.5 - 0.85) + 0.85 // Random increase between 50 and 150
-    const newValue = Math.floor(previousValue*increment)
-    console.log(newValue);
-
+    const increment = Math.random() * (1.5 - 0.85) + 0.85
+    const newValue = Math.floor(previousValue * increment)
     acc.push({ date: item.date, value: newValue })
-
     return acc
 }, [] as { date: string, value: number }[])
 
-
-interface LoanData {
-    ocid: string
-    loanAmount: number
-    collateral: string
-    apy: number
-    purpose: string
-    duration: string
-}
-
+// Mock data for the table
 const names = [
     'dany', 'alex', 'mike', 'jane', 'sara', 'chris', 'emma', 'noah', 'olivia', 'liam',
     'zoe', 'lucas', 'mia', 'mason', 'sophia', 'ben', 'ella', 'jacob', 'ava', 'james',
@@ -131,12 +96,21 @@ const loanPurposes = [
     'E-learning Platforms'
 ];
 
+interface LoanData {
+    ocid: string
+    loanAmount: number
+    collateral: string
+    apy: number
+    purpose: string
+    duration: string
+}
+
 const mockData: LoanData[] = Array.from({ length: 23 }, (_, index) => ({
-    ocid: `${names[index % names.length]}.edu`, // Generate OCID in the format of name.edu
-    loanAmount: Math.floor(Math.random() * 50000) + 1000, // Random loan amount between 1000 and 51000
+    ocid: `${names[index % names.length]}.edu`,
+    loanAmount: Math.floor(Math.random() * 50000) + 1000,
     collateral: ['Real Estate', 'Art', 'Car', 'Jewelry', 'Cryptocurrency'][Math.floor(Math.random() * 5)],
-    apy: parseFloat((Math.random() * (10 - 2) + 2).toFixed(2)), // Random APY between 2% and 10%
-    purpose: loanPurposes[Math.floor(Math.random() * loanPurposes.length)], // Random purpose of loan from the provided list
+    apy: parseFloat((Math.random() * (10 - 2) + 2).toFixed(2)),
+    purpose: loanPurposes[Math.floor(Math.random() * loanPurposes.length)],
     duration: ['1 year', '2 years', '3 years', '4 years'][Math.floor(Math.random() * 4)],
 }));
 
@@ -153,7 +127,6 @@ const FundScholarButton: DataGridCell<LoanData> = ({ row }) => (
 );
 
 const handleFundScholar = (loanData: LoanData) => {
-    // Logic to handle funding the scholar
     console.log("Funding scholar with OCID:", loanData.ocid);
 };
 
@@ -215,12 +188,12 @@ const customEaseOut = (t) => {
     }
 };
 
-
-
 export function RequestedLoansPage() {
     const [loansRequested, setLoansRequested] = useState(requestedData.reduce((acc, item) => acc + item.value, 0));
     const [loansSupplied, setLoansSupplied] = useState(suppliedData.reduce((acc, item) => acc + item.value, 0));
     const [scholarsCreated, setScholarsCreated] = useState(scholarsCreatedData[scholarsCreatedData.length - 1].value);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedLoan, setSelectedLoan] = useState<LoanData | null>(null);
 
     useEffect(() => {
         const requestedTotal = requestedData.reduce((acc, item) => acc + item.value, 0);
@@ -248,7 +221,6 @@ export function RequestedLoansPage() {
 
         animate();
     }, []);
-
 
     const gridRef = React.useRef<DataGrid<LoanData>>(null);
 
@@ -317,6 +289,11 @@ export function RequestedLoansPage() {
         }
     }, [])
 
+    const onRowClick = (row: LoanData) => {
+        setSelectedLoan(row);
+        setIsModalOpen(true);
+    };
+
     const renderValue = React.useCallback((context) => {
         if (context.id === 'loanAmount' || context.id === 'apy') {
             return <ActiveFilterValueInput bg='none' />
@@ -331,7 +308,7 @@ export function RequestedLoansPage() {
                     templateColumns={['repeat(1, 1fr)', null, null, 'repeat(3, 1fr)']}
                     gap={8}
                 >
-                    {/* First row - first column */}
+                    {/* First row cards */}
                     <GridItem>
                         <Card>
                             <CardBody>
@@ -346,7 +323,6 @@ export function RequestedLoansPage() {
                         </Card>
                     </GridItem>
 
-                    {/* First row - second column */}
                     <GridItem>
                         <Card>
                             <CardBody>
@@ -361,7 +337,6 @@ export function RequestedLoansPage() {
                         </Card>
                     </GridItem>
 
-                    {/* First row - third column */}
                     <GridItem>
                         <Card>
                             <CardBody>
@@ -395,6 +370,7 @@ export function RequestedLoansPage() {
                                     isSortable
                                     stickyHeader={true}
                                     instanceRef={gridRef}
+                                    onRowClick={(row) => onRowClick(row.original)}
                                     sx={{
                                         td: {
                                             justifyContent: 'left !important',
@@ -411,13 +387,21 @@ export function RequestedLoansPage() {
                                         rowsPerPageOptions={[5, 10, 15]}
                                         count={mockData.length}
                                         defaultPageSize={10}
-                                        sx={{px: '16px', py: '13px'}}
+                                        sx={{ px: '16px', py: '13px' }}
                                     />
                                 </DataGrid>
                             </FiltersProvider>
                         </MetricsCard>
                     </GridItem>
                 </Grid>
+
+                {selectedLoan && (
+                    <LoanDetailsModal
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        loanData={selectedLoan}
+                    />
+                )}
             </PageBody>
         </Page>
     )

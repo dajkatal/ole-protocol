@@ -119,6 +119,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
                 href={usePath('dashboard/supply')}
                 isActive={useActivePath('supply', { end: true })}
                 label="Supply a Loan"
+                badge={23}
                 icon={<FiUsers />}
                 hotkey="navigation.supply"
             />
@@ -126,7 +127,6 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
               href={usePath('dashboard/request')}
               isActive={useActivePath('request', { end: true })}
               label="Request Loan"
-              badge={2}
               icon={<FiInbox />}
               hotkey="navigation.request"
             />

@@ -102,8 +102,8 @@ export function DashboardPage() {
             />
             <ToolbarButton
                 as="a"
-                href="https://saas-ui.lemonsqueezy.com/checkout/buy/5c76854f-738a-46b8-b32d-932a97d477f5"
-                label="Buy Pro"
+                href="#"
+                label="Connect Wallet"
                 colorScheme="primary"
                 variant="solid"
                 className="pre-order"
@@ -143,7 +143,6 @@ export function DashboardPage() {
             <PageHeader
                 title="My Dashboard"
                 toolbar={toolbar}
-                footer={footer}
             />
             <PageBody
                 contentWidth="container.2xl"
@@ -159,57 +158,7 @@ export function DashboardPage() {
                     gap={{ base: 4, xl: 8 }}
                     pb="8"
                 >
-                    <GridItem colSpan={{ base: 1, lg: 2 }} maxW="100vw">
-                        <Card>
-                            <Tabs variant="unstyled" tabIndex={0}>
-                                <TabList
-                                    overflow="hidden"
-                                    borderTopRadius="md"
-                                    display="flex"
-                                    flexWrap="wrap"
-                                >
-                                    {data?.charts.map((metric) => (
-                                        <Tab
-                                            key={metric.id}
-                                            id={metric.id}
-                                            alignItems="stretch"
-                                            justifyContent="stretch"
-                                            flex={{ base: '0 0 50%', lg: '1 0 auto' }}
-                                            height="auto"
-                                            textAlign="left"
-                                            borderBottomWidth="1px"
-                                            borderRightWidth="1px"
-                                            _hover={{
-                                                bg: 'whiteAlpha.100',
-                                                _dark: {
-                                                    bg: 'whiteAlpha.100',
-                                                },
-                                            }}
-                                            _selected={{
-                                                borderBottomWidth: '2px',
-                                                borderBottomColor: 'primary.500',
-                                                display: 'flex',
-                                            }}
-                                            _last={{
-                                                borderRightWidth: '0',
-                                            }}
-                                        >
-                                            <Metric {...metric} />
-                                        </Tab>
-                                    ))}
-                                </TabList>
-                                <TabPanels>
-                                    {data?.charts.map((metric) => (
-                                        <TabPanel key={metric.id} pt="8">
-                                            <RevenueChart data={metric.data} />
-                                        </TabPanel>
-                                    ))}
-                                </TabPanels>
-                            </Tabs>
-                        </Card>
-                    </GridItem>
-                    <GridItem as={SalesByCountry} data={data?.sales} />
-                    <GridItem as={Activity} data={data?.activity} />
+
                 </Grid>
             </PageBody>
         </Page>
