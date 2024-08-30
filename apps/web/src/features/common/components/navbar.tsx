@@ -3,6 +3,8 @@
 import { Toolbar, ToolbarButton } from '@saas-ui-pro/react'
 import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa'
 
+import ConnectButton from './connectbtn'
+
 export function NavBar() {
   return (
     <Toolbar className="overview-toolbar" variant="ghost">
@@ -19,14 +21,15 @@ export function NavBar() {
         label="Star on Github"
       />
       <ToolbarButton as="a" href="" icon={<FaDiscord />} label="Join Discord" />
-      <ToolbarButton
+      {/* <ToolbarButton
         as="a"
         href="#"
         label="Connect EDU Wallet"
         colorScheme="primary"
         variant="solid"
         className="pre-order"
-      />
+      /> */}
+      <ConnectButton />
     </Toolbar>
   )
 }
