@@ -1,84 +1,33 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import {
-    Card,
-    Grid,
-    GridItem,
-    Tab,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Tabs,
+    Grid
 } from '@chakra-ui/react'
 import {
-    ErrorPage,
     Page,
     PageBody,
     PageHeader,
     Toolbar,
     ToolbarButton,
 } from '@saas-ui-pro/react'
-import { useQuery } from '@tanstack/react-query'
 import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa'
-
-import { useWorkspace } from '@app/features/common/hooks/use-workspace'
-
-import { getDashboard } from '@api/client'
-
-import {
-    DateRange,
-    DateRangePicker,
-    DateRangePresets,
-    SegmentedControl,
-    getRangeDiff,
-    getRangeValue,
-} from '@ui/lib'
+import { LoadingOverlay, LoadingSpinner } from '@saas-ui/react'
 
 import { IntroTour } from '../features/organizations/components/intro-tour'
-import { Activity } from '../features/organizations/components/metrics/activity'
-import { Metric } from '../features/organizations/components/metrics/metric'
-import { RevenueChart } from '../features/organizations/components/metrics/revenue-chart'
-import { SalesByCountry } from '../features/organizations/components/metrics/sales-by-country'
 
 export function DashboardPage() {
-    const workspace = useWorkspace()
+    const [isLoading, setIsLoading] = useState(true);
 
-    const [range, setRange] = useState('30d')
-    const [dateRange, setDateRange] = useState(getRangeValue('30d'))
-    const onPresetChange = (preset: string) => {
-        if (preset !== 'custom') {
-            setDateRange(getRangeValue(preset as DateRangePresets))
-        }
-        setRange(preset)
-    }
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1500000); // 1.5 seconds
 
-    const onRangeChange = (range: DateRange) => {
-        const diff = getRangeDiff(range)
-        if ([1, 3, 7, 30].includes(diff)) {
-            setRange(`${diff}`)
-        } else {
-            setRange('custom')
-        }
+        return () => clearTimeout(timer); // Cleanup the timer
+    }, []);
 
-        setDateRange(range)
-    }
-
-    const { data, isLoading } = useQuery({
-        queryKey: [
-            'dashboard',
-            {
-                workspace,
-                startDate: dateRange.start.toString(),
-                endDate: dateRange.end.toString(),
-            },
-        ] as const,
-        queryFn: ({ queryKey }) => getDashboard(queryKey[1]),
-        enabled: !!workspace,
-        refetchOnWindowFocus: false,
-        refetchInterval: false,
-    })
 
     const toolbar = (
         <Toolbar className="overview-toolbar" variant="ghost">
@@ -111,35 +60,8 @@ export function DashboardPage() {
         </Toolbar>
     )
 
-    const footer = (
-        <Toolbar justifyContent="flex-start" variant="secondary" size="xs">
-            <SegmentedControl
-                size="xs"
-                segments={[
-                    {
-                        id: '1d',
-                        label: '1d',
-                    },
-                    {
-                        id: '3d',
-                        label: '3d',
-                    },
-                    {
-                        id: '7d',
-                        label: '7d',
-                    },
-                    { id: '30d', label: '30d' },
-                    { id: 'custom', label: 'Custom' },
-                ]}
-                value={range}
-                onChange={onPresetChange}
-            />
-            <DateRangePicker value={dateRange} onChange={onRangeChange} />
-        </Toolbar>
-    )
-
     return (
-        <Page isLoading={isLoading}>
+        <Page>
             <PageHeader
                 title="My Dashboard"
                 toolbar={toolbar}
@@ -151,6 +73,12 @@ export function DashboardPage() {
                 px={{ base: 4, xl: 8 }}
             >
                 <IntroTour />
+                <LoadingOverlay variant="overlay"
+                                isLoading={isLoading}
+                                color="primary.500"
+                >
+                    <LoadingSpinner />
+                </LoadingOverlay>
                 <Grid
                     templateColumns={['repeat(1, 1fr)', null, null, 'repeat(2, 1fr)']}
                     gridAutoColumns="fr1"

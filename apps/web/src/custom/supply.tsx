@@ -40,14 +40,34 @@ const numberFormatter = (value: number) => {
     return new Intl.NumberFormat('en-US').format(value);
 }
 
-// Sample data for the sparklines and the table
 const loansRequestedData = [
     { date: 'Jan 1', value: 2000 },
     { date: 'Jan 8', value: 2500 },
     { date: 'Jan 15', value: 2300 },
-    // ... (other data points)
+    { date: 'Jan 22', value: 2700 },
+    { date: 'Jan 29', value: 4800 },
+    { date: 'Feb 5', value: 1000 },
+    { date: 'Feb 12', value: 4200 },
+    { date: 'Feb 19', value: 3400 },
+    { date: 'Feb 26', value: 2600 },
+    { date: 'Mar 5', value: 2800 },
+    { date: 'Mar 12', value: 2900 },
+    { date: 'Mar 19', value: 4100 },
+    { date: 'Mar 26', value: 3300 },
+    { date: 'Apr 2', value: 3400 },
+    { date: 'Apr 9', value: 2600 },
+    { date: 'Apr 16', value: 3700 },
+    { date: 'Apr 23', value: 5900 },
+    { date: 'Apr 30', value: 5100 },
+    { date: 'May 7', value: 6300 },
+    { date: 'May 14', value: 6500 },
+    { date: 'May 21', value: 6700 },
+    { date: 'May 28', value: 6900 },
+    { date: 'Jun 4', value: 7100 },
+    { date: 'Jun 11', value: 7300 },
+    { date: 'Jun 18', value: 8500 },
     { date: 'Jun 25', value: 8700 },
-];
+]
 
 const generateSuppliedData = () => {
     return Array.from({ length: 20 }, (_, i) => ({
