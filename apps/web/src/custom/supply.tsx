@@ -66,7 +66,9 @@ interface LoanData {
 
 const CurrencyCell: DataGridCell<LoanData> = ({ getValue }) => {
   const value = getValue<ethers.BigNumberish>()
-  return <Text>{currencyFormatter(Number(ethers.formatUnits(value, 6)))}</Text>
+  return (
+    <Text>{currencyFormatter(Number(ethers.formatUnits(value, 6)))} USDT</Text>
+  )
 }
 
 const CollateralCell: DataGridCell<LoanData> = ({ getValue }) => {
