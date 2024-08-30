@@ -1,45 +1,72 @@
-// LoanDetailsModal.tsx
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, Text, VStack } from '@chakra-ui/react';
-import { PropertyList, Property } from '@saas-ui/react';
+import React from 'react'
 
-interface LoanDetailsModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    loanData: {
-        ocid: string;
-        loanAmount: number;
-        collateral: string;
-        apy: number;
-        purpose: string;
-        duration: string;
-    };
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
+import { Property, PropertyList } from '@saas-ui/react'
+import { BigNumberish, ethers } from 'ethers'
+
+interface LoanData {
+  id: number
+  borrower: string
+  amount: BigNumberish
+  collateral: BigNumberish
+  duration: number
+  apy: number
+  reason: string
 }
 
-const LoanDetailsModal: React.FC<LoanDetailsModalProps> = ({ isOpen, onClose, loanData }) => {
-    return (
-        <Modal isOpen={isOpen} onClose={onClose} size="md">
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Loan Details</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    <PropertyList>
-                        <Property label="OCID" value={loanData.ocid} />
-                        <Property label="Loan Amount" value={`$${loanData.loanAmount.toLocaleString()}`} />
-                        <Property label="Collateral Offered" value={loanData.collateral} />
-                        <Property label="APY (%)" value={`${loanData.apy}%`} />
-                        <Property label="Purpose of Loan" value={loanData.purpose} />
-                        <Property label="Duration" value={loanData.duration} />
-                    </PropertyList>
-                </ModalBody>
-                <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onClose}>
-                        Close
-                    </Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
-    );
-};
+interface LoanDetailsModalProps {
+  isOpen: boolean
+  onClose: () => void
+  loanData: LoanData
+}
 
-export default LoanDetailsModal;
+const LoanDetailsModal: React.FC<LoanDetailsModalProps> = ({
+  isOpen,
+  onClose,
+  loanData,
+}) => {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} size="md">
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Loan Details</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <PropertyList>
+            <Property label="Loan ID" value={loanData.id.toString()} />
+            <Property label="Borrower" value={loanData.borrower} />
+            <Property
+              label="Loan Amount"
+              value={`$${ethers.formatUnits(loanData.amount, 6)}`}
+            />
+            <Property
+              label="Collateral Offered"
+              value={`${ethers.formatEther(loanData.collateral)} EDU`}
+            />
+            <Property label="APY (%)" value={`${loanData.apy / 100}%`} />
+            <Property label="Purpose of Loan" value={loanData.reason} />
+            <Property label="Duration" value={`${loanData.duration} days`} />
+          </PropertyList>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme="blue" mr={3} onClick={onClose}>
+            Close
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  )
+}
+
+export default LoanDetailsModal
