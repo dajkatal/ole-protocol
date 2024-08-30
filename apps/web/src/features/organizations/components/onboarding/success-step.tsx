@@ -13,7 +13,7 @@ const schema = z.object({
 
 type FormInput = z.infer<typeof schema>
 
-export const IntroductionStep = () => {
+export const SuccessStep = () => {
   const stepper = useStepperContext()
   const formRef = useRef<UseFormReturn<FormInput>>(null)
 
@@ -25,19 +25,12 @@ export const IntroductionStep = () => {
     <OnboardingStep
       schema={schema}
       formRef={formRef}
-      title="OLE Protocol Loan Application"
-      submitLabel="Start Application"
+      title="Congratulations! Your loan request was submitted!"
+      submitLabel="My Dashboard"
       onSubmit={() => handleStartApplication()} // Ensure it moves to the next step
     >
-      <VStack spacing={4} align="start">
-        <Text>
-          Welcome! You are about to apply for a loan through the OLE Protocol.
-          We just need a few details to get started.
-        </Text>
-        <Text>
-          Please ensure that you have all the necessary information ready before
-          proceeding.
-        </Text>
+      <VStack spacing={4} align="center">
+        <Text>You will be notified when a lender fulfills your loan.</Text>
       </VStack>
     </OnboardingStep>
   )
