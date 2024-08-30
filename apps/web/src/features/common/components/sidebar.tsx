@@ -109,26 +109,26 @@ export const AppSidebar: React.FC<AppSidebarProps> = (props) => {
         <SidebarSection overflowY="auto" flex="1">
           <NavGroup>
             <AppSidebarLink
-              href={usePath()}
-              isActive={useActivePath('dashboard', { end: false })}
-              label="Dashboard"
+              href={usePath('dashboard')}
+              isActive={useActivePath('dashboard', { end: true })}
+              label="My Dashboard"
               icon={<FiHome />}
               hotkey="navigation.dashboard"
             />
             <AppSidebarLink
+                href={usePath('dashboard/supply')}
+                isActive={useActivePath('supply', { end: true })}
+                label="Supply a Loan"
+                icon={<FiUsers />}
+                hotkey="navigation.supply"
+            />
+            <AppSidebarLink
               href={usePath('dashboard/request')}
-              isActive={useActivePath('dashboard/request', { end: false })}
+              isActive={useActivePath('request', { end: true })}
               label="Request Loan"
               badge={2}
               icon={<FiInbox />}
               hotkey="navigation.request"
-            />
-            <AppSidebarLink
-              href={usePath('contacts')}
-              isActive={useActivePath('contacts', { end: false })}
-              label="Contacts"
-              icon={<FiUsers />}
-              hotkey="navigation.contacts"
             />
           </NavGroup>
 

@@ -13,7 +13,7 @@ export interface MetricsCard extends Omit<CardProps, 'title'> {
 
 export const MetricsCard: React.FC<MetricsCard> = (props) => {
   const { title, noPadding, children, ...rest } = props
-  const bodyProps = noPadding ? { px: 0 } : {}
+  const bodyProps = noPadding ? { px: 0, py: 0 } : {}
   return (
     <Card {...rest}>
       {title && (

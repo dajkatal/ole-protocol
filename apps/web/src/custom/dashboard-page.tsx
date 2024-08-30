@@ -80,17 +80,6 @@ export function DashboardPage() {
         refetchInterval: false,
     })
 
-    const organization = data?.organization
-
-    if (!isLoading && !organization) {
-        return (
-            <ErrorPage
-                title="Something went wrong"
-                description={`We're not sure what happened! Please reload and try again.`}
-            />
-        )
-    }
-
     const toolbar = (
         <Toolbar className="overview-toolbar" variant="ghost">
             <ToolbarButton
@@ -152,7 +141,7 @@ export function DashboardPage() {
     return (
         <Page isLoading={isLoading}>
             <PageHeader
-                title={organization?.name}
+                title="My Dashboard"
                 toolbar={toolbar}
                 footer={footer}
             />
