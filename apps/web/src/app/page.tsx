@@ -140,25 +140,6 @@ const HeroSection: React.FC = () => (
               <ButtonLink colorScheme="primary" size="lg" href="/signup">
                 Get Started
               </ButtonLink>
-              <ButtonLink
-                size="lg"
-                href="https://demo.saas-ui.dev"
-                variant="outline"
-                rightIcon={
-                  <Icon
-                    as={FiArrowRight}
-                    sx={{
-                      transitionProperty: 'common',
-                      transitionDuration: 'normal',
-                      '.chakra-button:hover &': {
-                        transform: 'translate(5px)',
-                      },
-                    }}
-                  />
-                }
-              >
-                View demo
-              </ButtonLink>
             </ButtonGroup>
           </FallInPlace>
         </Hero>
