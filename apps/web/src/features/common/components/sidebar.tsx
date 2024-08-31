@@ -27,7 +27,9 @@ export const AppSidebar: React.FC = () => {
                 >
                     {/* Navbar brand/logo */}
                     <NavbarBrand>
-                        <Logo width={'80px'}/> {/* Adjust the logo component and size as needed */}
+                        <a href={'/'} >
+                            <Logo width={'80px'}/>
+                        </a>
                     </NavbarBrand>
 
                     {/* Navbar links */}

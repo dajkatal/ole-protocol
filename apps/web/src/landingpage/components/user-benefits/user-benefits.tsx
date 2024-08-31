@@ -1,5 +1,5 @@
 import {
-    Box,
+    Box, Button,
     Heading,
     HStack,
     Icon,
@@ -16,7 +16,8 @@ import { BackgroundGradient } from "src/landingpage/components/gradients/backgro
 import { Section, SectionProps, SectionTitle } from "src/landingpage/components/section";
 import React from "react";
 import { FiCheck } from "react-icons/fi";
-import { FiDollarSign, FiUserPlus } from "react-icons/fi"; // New icons
+import { FiDollarSign, FiUserPlus } from "react-icons/fi";
+import {useAuth} from "@app/features/common/hooks/use-auth"; // New icons
 
 export interface UserBoxProps extends SectionProps {
     title: string;
@@ -50,6 +51,7 @@ export const UserSection: React.FC<UserProps> = (props) => {
 };
 
 const UserBox: React.FC<UserBoxProps> = (props) => {
+    const {logIn} = useAuth();
     const { title, description, features, action, isHighlighted, ...rest } = props;
     return (
         <VStack
@@ -77,9 +79,9 @@ const UserBox: React.FC<UserBoxProps> = (props) => {
                     feature ? <UserFeature key={i} {...feature} /> : <br key={i} />
                 )}
             </UserFeatures>
-            <ButtonLink colorScheme="primary" {...action}>
+            <Button colorScheme="primary" onClick={logIn}>
                 {action.label || "Learn More"}
-            </ButtonLink>
+            </Button>
         </VStack>
     );
 };
@@ -137,7 +139,7 @@ const LenderBox = {
             iconColor: "purple.500"
         },
     ],
-    action: { href: "/lender-signup", label: "Start Investing" },
+    action: { href: "/dashboard", label: "Start Investing" },
     isHighlighted: true,
 };
 
@@ -154,7 +156,7 @@ const BorrowerBox = {
         { title: "Empower Your Growth", iconColor: "purple.500" },
         { title: "Transparent Terms", iconColor: "purple.500" },
     ],
-    action: { href: "/borrower-signup", label: "Get Funded" },
+    action: { href: "/dashboard", label: "Get Funded" },
 };
 
 

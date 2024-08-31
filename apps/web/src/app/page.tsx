@@ -23,7 +23,7 @@ import {
   Text,
   VStack,
   Wrap,
-  useClipboard,
+  useClipboard, Button,
 } from '@chakra-ui/react'
 import { Sparkline } from '@saas-ui/charts'
 import { Br, Link } from '@saas-ui/react'
@@ -65,6 +65,7 @@ import testimonials from 'src/landingpage/data/testimonials'
 
 import UserSectionComponent from '../landingpage/components/user-benefits/user-benefits'
 import UserBenefits from '../landingpage/components/user-benefits/user-benefits'
+import {useAuth} from "@app/features/common/hooks/use-auth";
 
 const Home = () => {
   return (
@@ -87,131 +88,135 @@ const Home = () => {
   )
 }
 
-const HeroSection: React.FC = () => (
-  <Box position="relative" overflow="hidden">
-    <BackgroundGradient height="100%" zIndex="-1" />
-    <Container maxW="container.xl" pt={{ base: 60, lg: 40 }} pb="40">
-      <Stack direction={{ base: 'column', lg: 'row' }} alignItems="center">
-        <Hero
-          id="home"
-          justifyContent="flex-start"
-          px="0"
-          title={
-            <FallInPlace>
-              Open Lending for <Br />{' '}
-              <Typewriter
-                words={[
-                  'Education',
-                  'Students',
-                  'Future Engineers',
-                  'Future Doctors',
-                  'Educators',
-                  'Everyone',
-                ]}
-                loop={0}
-                cursor
-                cursorStyle="_"
-                typeSpeed={70}
-                deleteSpeed={50}
-                delaySpeed={1000}
-              />
-            </FallInPlace>
-          }
-          description={
-            <FallInPlace delay={0.4} fontWeight="medium">
-              Empowering education with secure, decentralized loans. The{' '}
-              <Em>OLE Protocol</Em> makes funding your future easier and more
-              transparent.
-            </FallInPlace>
-          }
-        >
-          <FallInPlace delay={0.8}>
-            <HStack pt="4" pb="12" spacing="8">
-              <Link href="https://opencampus.xyz">
-                <Image
-                  src="/img/openCampusLogo.png"
-                  alt="Open Campus Logo"
-                  height={35}
-                  width={140}
-                />
-              </Link>
-            </HStack>
-            <ButtonGroup spacing={4} alignItems="center">
-              <ButtonLink colorScheme="primary" size="lg" href="/signup">
-                Get Started
-              </ButtonLink>
-            </ButtonGroup>
-          </FallInPlace>
-        </Hero>
-        <Box
-          height="600px"
-          position="absolute"
-          display={{ base: 'none', lg: 'block' }}
-          left={{ lg: '60%', xl: '55%' }}
-          width="80vw"
-          maxW="1100px"
-          margin="0 auto"
-        >
-          <FallInPlace delay={1}>
-            <Box overflow="hidden" height="100%">
-              <Image
-                src="/screenshots/list.png"
-                layout="fixed"
-                width={1200}
-                height={762}
-                alt="Screenshot of a ListPage in Saas UI Pro"
-                quality="75"
-                priority
-              />
+
+const HeroSection: React.FC = () => {
+  const {logIn} = useAuth();
+  return (
+      <Box position="relative" overflow="hidden">
+        <BackgroundGradient height="100%" zIndex="-1" />
+        <Container maxW="container.xl" pt={{ base: 60, lg: 40 }} pb="40">
+          <Stack direction={{ base: 'column', lg: 'row' }} alignItems="center">
+            <Hero
+                id="home"
+                justifyContent="flex-start"
+                px="0"
+                title={
+                  <FallInPlace>
+                    Open Lending for <Br />{' '}
+                    <Typewriter
+                        words={[
+                          'Education',
+                          'Students',
+                          'Future Engineers',
+                          'Future Doctors',
+                          'Educators',
+                          'Everyone',
+                        ]}
+                        loop={0}
+                        cursor
+                        cursorStyle="_"
+                        typeSpeed={70}
+                        deleteSpeed={50}
+                        delaySpeed={1000}
+                    />
+                  </FallInPlace>
+                }
+                description={
+                  <FallInPlace delay={0.4} fontWeight="medium">
+                    Empowering education with secure, decentralized loans. The{' '}
+                    <Em>OLE Protocol</Em> makes funding your future easier and more
+                    transparent.
+                  </FallInPlace>
+                }
+            >
+              <FallInPlace delay={0.8}>
+                <HStack pt="4" pb="12" spacing="8">
+                  <Link href="https://opencampus.xyz">
+                    <Image
+                        src="/img/openCampusLogo.png"
+                        alt="Open Campus Logo"
+                        height={35}
+                        width={140}
+                    />
+                  </Link>
+                </HStack>
+                <ButtonGroup spacing={4} alignItems="center">
+                  <Button colorScheme="primary" size="lg" onClick={logIn}>
+                    Get Started
+                  </Button>
+                </ButtonGroup>
+              </FallInPlace>
+            </Hero>
+            <Box
+                height="600px"
+                position="absolute"
+                display={{ base: 'none', lg: 'block' }}
+                left={{ lg: '60%', xl: '55%' }}
+                width="80vw"
+                maxW="1100px"
+                margin="0 auto"
+            >
+              <FallInPlace delay={1}>
+                <Box overflow="hidden" height="100%" boxShadow="-9px 12px 20px 1px rgba(0, 0, 0, 0.25) !important">
+                  <Image
+                      src="/screenshots/dashboard.png"
+                      layout="fixed"
+                      width={1200}
+                      height={762}
+                      alt="Screenshot of a the dashboard"
+                      quality="75"
+                      priority
+                  />
+                </Box>
+              </FallInPlace>
             </Box>
-          </FallInPlace>
-        </Box>
-      </Stack>
-    </Container>
-    <Features
-      id="benefits"
-      columns={[1, 2, 4]}
-      iconSize={4}
-      innerWidth="container.xl"
-      pt="20"
-      features={[
-        {
-          title: 'Impact-Driven Lending',
-          icon: FiTrendingUp,
-          description:
-            'Invest in education with confidence. Our platform ensures that every loan directly contributes to meaningful learning opportunities, fostering the next generation of global leaders.',
-          iconPosition: 'left',
-          delay: 1,
-        },
-        {
-          title: 'Transparent Borrower Insights',
-          icon: FiEye,
-          description:
-            'Access verified borrower profiles with Open Campus ID, ensuring informed lending decisions and alignment with educational goals.',
-          iconPosition: 'left',
-          delay: 0.6,
-        },
-        {
-          title: 'Loans Secured by EDU Tokens',
-          icon: FiLock,
-          description:
-            'Borrowers use EDU tokens as collateral to access loans, ensuring a secure and decentralized way to fund education.',
-          iconPosition: 'left',
-          delay: 0.8,
-        },
-        {
-          title: 'Tokenized RWAs (Coming Soon)',
-          icon: FiLayers,
-          description:
-            'Soon, use tokenized real-world assets as collateral, offering even more flexibility and security in education finance.',
-          iconPosition: 'left',
-          delay: 1.1,
-        },
-      ]}
-      reveal={FallInPlace}
-    />
-  </Box>
-)
+          </Stack>
+        </Container>
+        <Features
+            id="benefits"
+            columns={[1, 2, 4]}
+            iconSize={4}
+            innerWidth="container.xl"
+            pt="20"
+            features={[
+              {
+                title: 'Impact-Driven Lending',
+                icon: FiTrendingUp,
+                description:
+                    'Invest in education with confidence. Our platform ensures that every loan directly contributes to meaningful learning opportunities, fostering the next generation of global leaders.',
+                iconPosition: 'left',
+                delay: 1,
+              },
+              {
+                title: 'Transparent Borrower Insights',
+                icon: FiEye,
+                description:
+                    'Access verified borrower profiles with Open Campus ID, ensuring informed lending decisions and alignment with educational goals.',
+                iconPosition: 'left',
+                delay: 0.6,
+              },
+              {
+                title: 'Loans Secured by EDU Tokens',
+                icon: FiLock,
+                description:
+                    'Borrowers use EDU tokens as collateral to access loans, ensuring a secure and decentralized way to fund education.',
+                iconPosition: 'left',
+                delay: 0.8,
+              },
+              {
+                title: 'Tokenized RWAs (Coming Soon)',
+                icon: FiLayers,
+                description:
+                    'Soon, use tokenized real-world assets as collateral, offering even more flexibility and security in education finance.',
+                iconPosition: 'left',
+                delay: 1.1,
+              },
+            ]}
+            reveal={FallInPlace}
+        />
+      </Box>
+  )
+}
 
 const HighlightsSection = () => {
   const { value, onCopy, hasCopied } = useClipboard('yarn add @saas-ui/react')
