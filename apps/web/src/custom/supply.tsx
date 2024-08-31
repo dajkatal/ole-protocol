@@ -24,7 +24,7 @@ import {
   DataGridCell,
   FiltersAddButton,
   FiltersProvider,
-  getDataGridFilter,
+  getDataGridFilter, PageHeader,
 } from '@saas-ui-pro/react'
 import { DataGridPagination, Page, PageBody, Toolbar } from '@saas-ui-pro/react'
 import { Sparkline } from '@saas-ui/charts'
@@ -400,8 +400,8 @@ export function RequestedLoansPage() {
 
   return (
       <Page>
+        <PageHeader />
         <PageBody contentWidth="container.2xl" py={8} px={8} position="relative">
-          <NavBar />
           <LoadingOverlay
               variant="overlay"
               isLoading={isLoading}

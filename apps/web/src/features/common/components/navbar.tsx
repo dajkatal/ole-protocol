@@ -21,14 +21,7 @@ export function NavBar() {
         label="Star on Github"
       />
       <ToolbarButton as="a" href="" icon={<FaDiscord />} label="Join Discord" />
-      {/* <ToolbarButton
-        as="a"
-        href="#"
-        label="Connect EDU Wallet"
-        colorScheme="primary"
-        variant="solid"
-        className="pre-order"
-      /> */}
+
       <ConnectButton />
     </Toolbar>
   )

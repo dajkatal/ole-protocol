@@ -400,7 +400,7 @@ export function DashboardPage() {
 
     return (
         <Page>
-            <PageHeader title="My Dashboard" toolbar={<NavBar />} />
+            <PageHeader />
             <PageBody
                 contentWidth="container.2xl"
                 bg="page-body-bg-subtle"

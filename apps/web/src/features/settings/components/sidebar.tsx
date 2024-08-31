@@ -1,101 +1,67 @@
 import * as React from 'react'
-
 import { Heading, useBreakpointValue } from '@chakra-ui/react'
 import { Has } from '@saas-ui-pro/feature-flags'
 import {
-  BackButton,
-  ResizeHandle,
-  ResizeHandler,
-  Resizer,
-} from '@saas-ui-pro/react'
-import {
-  NavGroup,
-  NavItem,
-  NavItemProps,
-  Sidebar,
-  SidebarOverlay,
-  SidebarSection,
-  SidebarToggleButton,
-  useHotkeysShortcut,
-  useLocalStorage,
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarLink,
+  AppShell,
 } from '@saas-ui/react'
 import { FiFolder, FiUser } from 'react-icons/fi'
 
 import { usePath } from '@app/features/common/hooks/use-path'
 import { useActivePath } from '@app/nextjs'
 
-import { ElectronNav, useHelpCenter } from '@ui/lib'
-
-const SettingsLink = (props: NavItemProps & { path: string }) => {
-  const { path, ...rest } = props
+const SettingsLink = (props: { path: string; label: string }) => {
+  const { path, label } = props
   const href = usePath(`/settings${path}`)
   return (
-    <NavItem inset={5} href={href} isActive={useActivePath(href)} {...rest} />
+      <NavbarLink href={href} isActive={useActivePath(href)}>
+        {label}
+      </NavbarLink>
   )
 }
 
-export const SettingsSidebar = () => {
-  const backRef = React.useRef<HTMLButtonElement>(null)
-
-  const help = useHelpCenter()
-
-  useHotkeysShortcut('general.help', () => {
-    help.open()
-  })
-
-  useHotkeysShortcut('settings.close', () => {
-    // Simply triggering a click here, so we don't need to reference the router.
-    backRef.current?.click()
-  })
-
-  const [width, setWidth] = useLocalStorage('app.sidebar.width', 280)
-
-  const onResize: ResizeHandler = ({ width }) => {
-    setWidth(width)
-  }
-
+export const SettingsNavbar = () => {
   return (
-    <Resizer
-      defaultWidth={width}
-      onResize={onResize}
-      isResizable={useBreakpointValue(
-        { base: false, lg: true },
-        { fallback: 'lg' },
-      )}
-    >
-      <Sidebar>
-        <SidebarToggleButton />
-        <ElectronNav />
-
-        <SidebarSection direction="row" alignItems="center">
-          <BackButton href={usePath()} ref={backRef} />
-          <Heading as="h1" fontSize="xl">
-            Settings
-          </Heading>
-        </SidebarSection>
-        <SidebarSection flex="1" overflowY="auto">
-          <Has feature="settings">
-            <NavGroup title="Organization" icon={<FiFolder />}>
-              <SettingsLink path="/">Overview</SettingsLink>
-              <SettingsLink path="/organization">Organization</SettingsLink>
-              <SettingsLink path="/members">Members</SettingsLink>
-              <SettingsLink path="/plans">Plans</SettingsLink>
-              <SettingsLink path="/billing">Billing</SettingsLink>
-            </NavGroup>
-          </Has>
-
-          <NavGroup title="Account" icon={<FiUser />}>
-            <SettingsLink path="/account">Profile</SettingsLink>
-            <SettingsLink path="/account/security">Security</SettingsLink>
-            <SettingsLink path="/account/notifications">
-              Notifications
-            </SettingsLink>
-            <SettingsLink path="/account/api">Api</SettingsLink>
-          </NavGroup>
-        </SidebarSection>
-        <SidebarOverlay />
-        <ResizeHandle />
-      </Sidebar>
-    </Resizer>
+      <AppShell
+          navbar={
+            <Navbar
+                position="sticky"
+                borderBottomWidth="1px"
+                background="transparent"
+                backdropFilter="blur(10px)"
+            >
+              <NavbarBrand>
+                <Heading as="h1" fontSize="xl">
+                  Settings
+                </Heading>
+              </NavbarBrand>
+              <NavbarContent>
+                <Has feature="settings">
+                  <NavbarItem icon={<FiFolder />} label="Organization">
+                    <SettingsLink path="/" label="Overview" />
+                    <SettingsLink path="/organization" label="Organization" />
+                    <SettingsLink path="/members" label="Members" />
+                    <SettingsLink path="/plans" label="Plans" />
+                    <SettingsLink path="/billing" label="Billing" />
+                  </NavbarItem>
+                </Has>
+                <NavbarItem icon={<FiUser />} label="Account">
+                  <SettingsLink path="/account" label="Profile" />
+                  <SettingsLink path="/account/security" label="Security" />
+                  <SettingsLink path="/account/notifications" label="Notifications" />
+                  <SettingsLink path="/account/api" label="Api" />
+                </NavbarItem>
+              </NavbarContent>
+            </Navbar>
+          }
+      >
+        {/* Your main content here */}
+      </AppShell>
   )
 }
+
+export default SettingsNavbar
