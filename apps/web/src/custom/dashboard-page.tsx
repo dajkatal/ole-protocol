@@ -6,14 +6,10 @@ import {
     Grid,
     GridItem,
     Card,
-    CardBody,
-    Stat,
-    StatLabel,
-    StatNumber,
     Text,
-    HStack,
     Tabs,
-    TabList, Tab, TabPanels, TabPanel
+    TabList, Tab, TabPanels, TabPanel, Badge,
+    Button
 } from '@chakra-ui/react'
 import {
     LoadingOverlay,
@@ -71,13 +67,16 @@ const requestedData = suppliedData.map(item => ({
     value: Math.round(item.value * 1.44),
 }))
 
-const columns: ColumnDef<any>[] = [
+const requestedLoanColumns: ColumnDef<any>[] = [
     {
-        id: 'loanAmount',
+        id: 'amount',
         header: 'Loan Amount',
         cell: ({ getValue }) => (
             <Text>
-                {currencyFormatter(getValue<number>())}
+                {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                }).format(getValue<number>())}
             </Text>
         ),
         meta: {
@@ -86,35 +85,207 @@ const columns: ColumnDef<any>[] = [
         filterFn: getDataGridFilter('number'),
     },
     {
-        id: 'collateral',
-        header: 'Collateral Offered',
+        id: 'apy',
+        header: 'APY (%)',
+        cell: ({ getValue }) => <Text>{getValue<number>().toFixed(2)}%</Text>,
+        meta: {
+            isNumeric: true,
+        },
+        filterFn: getDataGridFilter('number'),
+    },
+    {
+        id: 'amountToRepay',
+        header: 'Amount to Repay',
+        cell: ({ row }) => {
+            const amount = row.original.amount;
+            const apy = row.original.apy;
+            const amountToRepay = amount * (1 + apy / 100); // Calculate amount to repay
+
+            return (
+                <Text>
+                    {new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                    }).format(amountToRepay)}
+                </Text>
+            );
+        },
+        meta: {
+            isNumeric: true,
+        },
+        filterFn: getDataGridFilter('number'),
+    },
+    {
+        id: 'reason',
+        header: 'Reason',
+        cell: ({ getValue }) => (
+            <Text
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                maxWidth="150px" // Adjust this width as needed
+            >
+                {getValue<string>()}
+            </Text>
+        ),
+        filterFn: getDataGridFilter('string'),
+    },
+    {
+        id: 'daysTillExpiry',
+        header: 'Days Till Due',
+        cell: ({ getValue }) => <Text>{getValue<number>()}</Text>,
+        meta: {
+            isNumeric: true,
+        },
+        filterFn: getDataGridFilter('number'),
+    },
+    {
+        id: 'fulfilled',
+        header: 'Fulfilled',
+        cell: ({ getValue }) => {
+            const fulfilled = getValue<boolean>();
+            const colorScheme = fulfilled ? 'green' : 'red'; // Green if fulfilled, red if not
+
+            return (
+                <Badge
+                    fontWeight="normal"
+                    textAlign="center"
+                    borderRadius="5px"
+                    p="2px 4px"
+                    colorScheme={colorScheme}
+                >
+                    {fulfilled ? 'Yes' : 'No'}
+                </Badge>
+            );
+        },
+        meta: {
+            isNumeric: false,
+        },
+        filterFn: getDataGridFilter('boolean'),
+        sortFn: (rowA, rowB) => {
+            const fulfilledA = rowA.original.fulfilled ? 1 : 0;
+            const fulfilledB = rowB.original.fulfilled ? 1 : 0;
+            return fulfilledA - fulfilledB; // Sorts unfulfilled (false) before fulfilled (true)
+        },
+    },
+    {
+        id: 'repay',
+        header: '',
+        cell: ({ row }) => {
+            const fulfilled = row.original.fulfilled;
+
+            return (
+                <Button
+                    colorScheme="blue"
+                    size="sm"
+                    onClick={() => alert('Repay action')}
+                    width="100px"
+                    bgColor={fulfilled ? 'gray' : 'blue.500'}
+                    isDisabled={fulfilled}
+                >
+                    {fulfilled ? 'Already Paid' : 'Repay Now'}
+                </Button>
+            );
+        },
+        filterFn: getDataGridFilter('boolean'),
+    },
+];
+
+
+const suppliedLoanColumns: ColumnDef<any>[] = [
+    {
+        id: 'amount',
+        header: 'Loan Amount',
+        cell: ({ getValue }) => (
+            <Text>
+                {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                }).format(getValue<number>())}
+            </Text>
+        ),
+        meta: {
+            isNumeric: true,
+        },
+        filterFn: getDataGridFilter('number'),
+    },
+    {
+        id: 'borrowerOCID',
+        header: 'Borrower OCID',
+        cell: ({ getValue }) => <Text>{getValue<string>()}</Text>,
         filterFn: getDataGridFilter('string'),
     },
     {
         id: 'apy',
         header: 'APY (%)',
+        cell: ({ getValue }) => <Text>{getValue<number>().toFixed(2)}%</Text>,
         meta: {
             isNumeric: true,
         },
-        cell: ({ getValue }) => <Text>{getValue<number>()}%</Text>,
         filterFn: getDataGridFilter('number'),
     },
     {
-        id: 'purpose',
-        header: 'Purpose of Loan',
-        filterFn: getDataGridFilter('string'),
+        id: 'profitOnFulfilment',
+        header: 'Profit on Fulfilment',
+        cell: ({ getValue }) => (
+            <Text>
+                {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                }).format(getValue<number>())}
+            </Text>
+        ),
+        meta: {
+            isNumeric: true,
+        },
+        filterFn: getDataGridFilter('number'),
     },
     {
-        id: 'duration',
-        header: 'Duration',
-        filterFn: getDataGridFilter('string'),
+        id: 'daysTillExpiry',
+        header: 'Days Till Expiry',
+        cell: ({ getValue }) => <Text>{getValue<number>()}</Text>,
+        meta: {
+            isNumeric: true,
+        },
+        filterFn: getDataGridFilter('number'),
     },
     {
-        id: 'ocid',
-        header: 'OCID',
+        id: 'status',
+        header: 'Status',
+        cell: ({ getValue }) => {
+            const status = getValue<string>();
+            let colorScheme = 'gray'; // Default color
+
+            if (status === 'Paid') {
+                colorScheme = 'green';
+            } else if (status === 'Defaulted') {
+                colorScheme = 'red';
+            } else if (status === 'Ongoing') {
+                colorScheme = 'blue';
+            }
+
+            return (
+                <Badge
+                    fontWeight="normal"
+                    textAlign="center"
+                    borderRadius="5px"
+                    colorScheme={colorScheme}
+                >
+                    {status}
+                </Badge>
+            );
+        },
         filterFn: getDataGridFilter('string'),
+        sortFn: (rowA, rowB) => {
+            const statusOrder = { 'Ongoing': 0, 'Paid': 1, 'Defaulted': 2 };
+            const statusA = rowA.original.status;
+            const statusB = rowB.original.status;
+
+            return statusOrder[statusA] - statusOrder[statusB];
+        },
     },
-]
+];
+
 
 const loanSuppliedMetric = {
     label: "Loans You Supplied",
@@ -261,17 +432,21 @@ export function DashboardPage() {
                                     </Tab>
                                 </TabList>
                                 <TabPanels>
-                                    <TabPanel key="loans-supplied" pt="8">
+                                    <TabPanel key="loans-supplied" pt="8" pb="0">
                                         <DataGrid
-                                            columns={columns}
+                                            columns={suppliedLoanColumns}
                                             data={mockDataSupplied}
                                             isSortable
+                                            initialState={{
+                                                sorting: [{ id: 'status', desc: false }] // This sets the initial sorting state to sort by 'fulfilled' in ascending order
+                                            }}
                                             stickyHeader={true}
                                             sx={{
                                                 borderRadius: '10px',
                                                 overflow: 'hidden',
                                                 td: {
                                                     justifyContent: 'left !important',
+                                                    height: '56px'
                                                 },
                                                 th: {
                                                     justifyContent: 'left !important',
@@ -289,10 +464,13 @@ export function DashboardPage() {
                                             />
                                         </DataGrid>
                                     </TabPanel>
-                                    <TabPanel key="loans-requested" pt="8">
+                                    <TabPanel key="loans-requested" pt="8" pb="0">
                                         <DataGrid
-                                            columns={columns}
+                                            columns={requestedLoanColumns}
                                             data={mockDataRequested}
+                                            initialState={{
+                                                sorting: [{ id: 'fulfilled', desc: false }] // This sets the initial sorting state to sort by 'fulfilled' in ascending order
+                                            }}
                                             isSortable
                                             stickyHeader={true}
                                             sx={{
