@@ -29,7 +29,6 @@ const YourOcImpact: React.FC = () => {
                     boxSize="80px"
                 />
 
-                {/* Display the Text Underneath the Logo */}
                 <VStack spacing={2} textAlign="center">
                     <Text fontSize="lg" fontWeight="bold">
                         You are currently ranked 762 in the OC Network
@@ -42,7 +41,6 @@ const YourOcImpact: React.FC = () => {
                     </Text>
                 </VStack>
 
-                {/* Add the Supply a Loan Button */}
                 <a href={usePath(`dashboard/supply`)}>
                 <Button colorScheme="blue" size="md" mt={10}>
                     Supply a Loan

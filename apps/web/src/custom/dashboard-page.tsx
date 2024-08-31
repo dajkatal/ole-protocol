@@ -408,7 +408,6 @@ export function DashboardPage() {
                 px={{ base: 4, xl: 8 }}
                 position="relative"
             >
-                <IntroTour />
                 <LoadingOverlay
                     variant="overlay"
                     isLoading={isLoading}
