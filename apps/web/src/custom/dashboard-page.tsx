@@ -286,25 +286,83 @@ const suppliedLoanColumns: ColumnDef<any>[] = [
     },
 ];
 
+const totalRequested = mockDataRequested.reduce((acc, loan) => acc + loan.amount, 0);
+const totalSupplied = mockDataSupplied.reduce((acc, loan) => acc + loan.amount, 0);
 
-const loanSuppliedMetric = {
-    label: "Loans You Supplied",
-    value: "$124,312.00",
-    previousValue: "$94,312.00",
-    change: "30",
-    isIncreasePositive: true
-}
-const loanRequestedMetric = {
-    label: "Loans You Requested",
-    value: "$24,312.00",
-    change: "",
-    isIncreasePositive: true
-}
+
+const customEaseOut = (t) => {
+    if (t < 0.5) {
+        return 4 * t * t * t; // Quick start
+    } else {
+        const f = (t - 1);
+        return 1 + f * f * f * f * f; // Very slow end
+    }
+};
 
 export function DashboardPage() {
     const [isLoading, setIsLoading] = useState(true)
-    const [loansRequested, setLoansRequested] = useState(requestedData.reduce((acc, item) => acc + item.value, 0))
-    const [loansSupplied, setLoansSupplied] = useState(suppliedData.reduce((acc, item) => acc + item.value, 0))
+    const [loansRequested, setLoansRequested] = useState(totalRequested);
+    const [loansSupplied, setLoansSupplied] = useState(totalSupplied);
+
+    const [loanSuppliedMetric, setLoanSuppliedMetric] = useState({
+        label: "Loans You Supplied",
+        value: currencyFormatter(totalSupplied),
+        previousValue: currencyFormatter(totalSupplied * 0.70),
+        change: "30",
+        isIncreasePositive: true
+    });
+
+    const [loanRequestedMetric, setLoanRequestedMetric] = useState({
+        label: "Loans You Requested",
+        value: currencyFormatter(totalRequested),
+        change: "",
+        isIncreasePositive: true
+    });
+
+    useEffect(() => {
+        const totalRequested = mockDataRequested.reduce((acc, loan) => acc + loan.amount, 0);
+        const totalSupplied = mockDataSupplied.reduce((acc, loan) => acc + loan.amount, 0);
+
+        const duration = 500; // Animation duration in milliseconds
+        const frameRate = 1000 / 60; // 60 FPS
+        const totalFrames = Math.round(duration / frameRate);
+
+        let currentFrame = 0;
+
+        const animate = () => {
+            currentFrame++;
+            const progress = customEaseOut(currentFrame / totalFrames);
+
+            const animatedRequested = Math.floor(totalRequested * progress);
+            const animatedSupplied = Math.floor(totalSupplied * progress);
+
+            setLoansRequested(animatedRequested);
+            setLoansSupplied(animatedSupplied);
+
+            // Update the metric states here
+            setLoanSuppliedMetric((prevMetric) => ({
+                ...prevMetric,
+                value: currencyFormatter(animatedSupplied),
+            }));
+
+            setLoanRequestedMetric((prevMetric) => ({
+                ...prevMetric,
+                value: currencyFormatter(animatedRequested),
+            }));
+
+            if (currentFrame < totalFrames) {
+                requestAnimationFrame(animate);
+            }
+        };
+
+        // Add a delay before starting the animation
+        const timeout = setTimeout(() => {
+            animate();
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, []);
+
 
     useEffect(() => {
         const timer = setTimeout(() => {

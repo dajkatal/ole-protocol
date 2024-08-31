@@ -38,6 +38,7 @@ import { BrowserProvider, Contract } from 'ethers'
 import oleABI from '../../../../contracts/oleprotocolabi.json'
 import { NavBar } from '../features/common/components/navbar'
 import { MetricsCard } from '../features/organizations/components/metrics/metrics-card'
+import { LoadingOverlay, LoadingSpinner } from "@saas-ui/react"
 
 // Imported data from the old code
 const currencyFormatter = (value: number) => {
@@ -123,7 +124,7 @@ interface LoanData {
 const CurrencyCell: DataGridCell<LoanData> = ({ getValue }) => {
   const value = getValue<ethers.BigNumberish>()
   return (
-    <Text>{currencyFormatter(Number(ethers.formatUnits(value, 6)))} USDT</Text>
+      <Text>{currencyFormatter(Number(ethers.formatUnits(value, 6)))} USDT</Text>
   )
 }
 
@@ -176,7 +177,7 @@ const FundScholarButton: DataGridCell<LoanData> = ({ row }) => {
       })
 
       // Refresh available loans
-      //fetchAvailableLoans()
+      fetchAvailableLoans()
     } catch (error) {
       console.error('Error supplying loan:', error)
       toast({
@@ -247,8 +248,7 @@ const columns: ColumnDef<LoanData>[] = [
   },
 ]
 
-
-const customEaseOut = (t) => {
+const customEaseOut = (t: number): number => {
   if (t < 0.5) {
     return 4 * t * t * t; // Quick start
   } else {
@@ -262,6 +262,12 @@ export function RequestedLoansPage() {
   const [loansRequested, setLoansRequested] = useState(requestedData.reduce((acc, item) => acc + item.value, 0))
   const [loansSupplied, setLoansSupplied] = useState(suppliedData.reduce((acc, item) => acc + item.value, 0))
   const [scholarsCreated, setScholarsCreated] = useState(scholarsCreatedData[scholarsCreatedData.length - 1].value)
+  const [isLoading, setIsLoading] = useState(true);
+  const toast = useToast()
+  const gridRef = useRef<DataGrid<LoanData>>(null)
+
+  const { isConnected } = useWeb3ModalAccount()
+  const { walletProvider } = useWeb3ModalProvider()
 
   useEffect(() => {
     const requestedTotal = requestedData.reduce((acc, item) => acc + item.value, 0);
@@ -287,16 +293,21 @@ export function RequestedLoansPage() {
       }
     };
 
-    animate();
+    // Add a delay before starting the animation
+    const timeout = setTimeout(() => {
+      animate();
+    }, 500);
+
+    return () => clearTimeout(timeout);
   }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 500)
 
-
-  const toast = useToast()
-  const gridRef = useRef<DataGrid<LoanData>>(null)
-
-  const { isConnected } = useWeb3ModalAccount()
-  const { walletProvider } = useWeb3ModalProvider()
+    return () => clearTimeout(timer)
+  }, [])
 
   const fetchAvailableLoans = useCallback(async () => {
     if (!isConnected || !walletProvider) return
@@ -389,8 +400,16 @@ export function RequestedLoansPage() {
 
   return (
       <Page>
-        <PageBody contentWidth="container.2xl" py={8} px={8}>
+        <PageBody contentWidth="container.2xl" py={8} px={8} position="relative">
           <NavBar />
+          <LoadingOverlay
+              variant="overlay"
+              isLoading={isLoading}
+              background="#171a1d !important"
+              zIndex={3}
+          >
+            <LoadingSpinner size="lg" color="primary.500" thickness="4px" />
+          </LoadingOverlay>
           <Grid
               templateColumns={['repeat(1, 1fr)', null, null, 'repeat(3, 1fr)']}
               gap={8}
