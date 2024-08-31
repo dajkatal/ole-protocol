@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     default: 'OLE Protocol',
   },
   icons: {
-    icon: '/favicons/favicon-32x32.png',
-    apple: '/favicons/apple-touch-icon.png',
+    icon: '/img/oc-logo.png',
+    apple: '/img/oc-logo.png',
   },
 }
 
