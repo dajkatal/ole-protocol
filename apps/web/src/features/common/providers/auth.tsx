@@ -12,7 +12,7 @@ interface AuthProviderProps extends OCConnectProps {
 // Custom AuthProvider component that wraps the app with OCConnect
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const opts = {
-    redirectUri: 'http://localhost:3000/redirect', // Adjust this URL
+    redirectUri: '/redirect', // Adjust this URL
   };
 
   return (
