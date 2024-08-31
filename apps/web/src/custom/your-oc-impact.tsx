@@ -3,6 +3,7 @@
 import * as React from 'react'
 import {Flex, Image, Text, VStack, Button, Spacer} from '@chakra-ui/react'
 import { MetricsCard } from '@app/features/organizations/components/metrics/metrics-card'
+import {usePath} from "@app/features/common/hooks/use-path";
 
 const YourOcImpact: React.FC = () => {
     return (
@@ -42,9 +43,11 @@ const YourOcImpact: React.FC = () => {
                 </VStack>
 
                 {/* Add the Supply a Loan Button */}
+                <a href={usePath(`dashboard/supply`)}>
                 <Button colorScheme="blue" size="md" mt={10}>
                     Supply a Loan
                 </Button>
+                </a>
             </Flex>
         </MetricsCard>
     )

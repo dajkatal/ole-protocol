@@ -1,6 +1,7 @@
 // @ts-ignore
 import { useOCAuth } from '@opencampus/ocid-connect-js';
 import { useEffect, useState } from 'react';
+import { useLocalStorage } from "@saas-ui/react";
 
 const dummyUser = {
     id: 'dummyUserId',
@@ -12,72 +13,44 @@ const dummyUser = {
 export const useAuth = () => {
     const { authState, ocAuth } = useOCAuth();
 
-    // State to manage the authentication status
-    const [isAuthenticated, setIsAuthenticated] = useState(() => {
-        return localStorage.getItem('isAuthenticated') === 'true';
-    });
+    // Directly use useLocalStorage for states
+    const [isAuthenticated, setIsAuthenticated] = useLocalStorage('isAuthenticated', false);
+    const [username, setUsername] = useLocalStorage('username', null);
+    const [user, setUser] = useLocalStorage('user', dummyUser);
+    const [ocAuthData, setOcAuthData] = useLocalStorage('ocAuth', null);
 
     const [isLoading, setIsLoading] = useState(false); // Initialize isLoading to false
-    const [username, setUsername] = useState(() => {
-        return localStorage.getItem('username') || null; // Initialize from localStorage if available
-    });
 
     const storeOcAuthInLocalStorage = (ocAuth) => {
         const authData = {
             authInfoManager: ocAuth.authInfoManager, // Assuming this is serializable
         };
-        localStorage.setItem('ocAuth', JSON.stringify(authData));
+        setOcAuthData(authData);
     };
 
     const initializeAuthState = () => {
         if (authState.isAuthenticated) {
             setIsAuthenticated(true);
-            localStorage.setItem('isAuthenticated', 'true');
             storeOcAuthInLocalStorage(ocAuth);
 
             // Set and store username if authenticated
             if (ocAuth?.authInfoManager?._idInfo?.edu_username) {
                 setUsername(ocAuth.authInfoManager._idInfo.edu_username);
-                localStorage.setItem('username', ocAuth.authInfoManager._idInfo.edu_username);
             }
-
         } else {
             setIsAuthenticated(false);
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('ocAuth');
+            setOcAuthData(null);
             setUsername(null);
-            localStorage.removeItem('username');
+            setUser(dummyUser);
         }
 
         setIsLoading(false);
     };
 
-    // Safely parse user data from localStorage
-    const getUserFromLocalStorage = () => {
-        const user = localStorage.getItem('user');
-        try {
-            return user !== 'undefined' ? JSON.parse(user) : dummyUser;
-        } catch (error) {
-            console.error('Failed to parse user from localStorage:', error);
-            return dummyUser;
-        }
-    };
-
-    // Retrieve ocAuth from localStorage
     const getOcAuthFromLocalStorage = () => {
-        const ocAuthData = localStorage.getItem('ocAuth');
-        if (!ocAuthData || ocAuthData === 'undefined') {
-            return null;
-        }
-        try {
-            return JSON.parse(ocAuthData);
-        } catch (error) {
-            console.error('Failed to parse ocAuth from localStorage:', error);
-            return null;
-        }
+        return ocAuthData;
     };
 
-    const user = getUserFromLocalStorage();
     const storedOcAuth = getOcAuthFromLocalStorage();
 
     // Custom function to handle login
@@ -89,7 +62,7 @@ export const useAuth = () => {
             console.error('Login error:', error);
         }
         initializeAuthState();
-        setIsLoading(true);
+        setIsLoading(false);
     };
 
     // Custom function to handle logout
@@ -100,13 +73,12 @@ export const useAuth = () => {
             // Perform logout and clear any stored session
             localStorage.removeItem('ocidAuthToken');
             sessionStorage.removeItem('ocidSession');
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('ocAuth'); // Clear stored ocAuth
-            localStorage.removeItem('username'); // Clear stored username
+            setOcAuthData(null); // Clear stored ocAuth
+            setUsername(null); // Clear stored username
 
             // Reset states
             setIsAuthenticated(false);
-            setUsername(null);
+            setUser(dummyUser);
 
             // Redirect the user to a login page or another safe page
             window.location.href = '/'; // Adjust the URL as needed

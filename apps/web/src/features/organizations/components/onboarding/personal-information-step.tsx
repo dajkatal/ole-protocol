@@ -4,7 +4,7 @@ import * as z from 'zod'
 import {
   Field,
   FormLayout,
-  UseFormReturn,
+  UseFormReturn, useLocalStorage,
   useSnackbar,
   useStepperContext,
 } from '@saas-ui/react'
@@ -31,10 +31,8 @@ export const PersonalInformationStep = () => {
   const { username } = useAuth() // Get username from useAuth hook
 
   // Retrieve user data from localStorage
-  const storedUser = localStorage.getItem('user')
-  const userData = storedUser
-    ? JSON.parse(storedUser)
-    : { fname: '', lname: '' }
+  const [ userData, setUserData ] = useLocalStorage('user', { fname: '', lname: '' });
+
   const fullName = `${userData.fname} ${userData.lname}`
 
   return (

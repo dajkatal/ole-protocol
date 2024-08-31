@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { Has } from '@saas-ui-pro/feature-flags'
 import { useAuth } from 'src/features/common/hooks/use-auth'
-import { PersonaAvatar, useHotkeysShortcut } from '@saas-ui/react'
+import {PersonaAvatar, useHotkeysShortcut, useLocalStorage} from '@saas-ui/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 
@@ -24,8 +24,8 @@ import { usePath } from '../hooks/use-path'
 export const UserMenu = () => {
   const { username, logOut } = useAuth()
 
-  const storedUser = localStorage.getItem('user');
-  const userData = JSON.parse(storedUser);
+  const [userData, setUserdata] = useLocalStorage('user', { fname: '', lname: '' });
+  
   // Combine fname and lname to create the full name
   const fullName = `${userData.fname} ${userData.lname} (${username})`;
 
