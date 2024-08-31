@@ -53,11 +53,11 @@ const siteConfig = {
         label: 'Contact',
       },
       {
-        href: 'https://twitter.com/saas_js',
+        href: 'https://x.com/oleprotocol',
         label: <FaTwitter size="14" />,
       },
       {
-        href: 'https://github.com/saas-js/saas-ui',
+        href: 'https://github.com/dajkatal/ole-protocol',
         label: <FaGithub size="14" />,
       },
     ],
