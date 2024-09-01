@@ -6,6 +6,8 @@ The **Open Lending for Education (O.L.E.) Protocol** is a revolutionary decentra
 
 By integrating **OC-IDs** (Open Campus IDs), overcollateralized loans, and end-to-end lending processes, O.L.E. ensures that both lenders and borrowers can engage in a system rooted in trust, growth, and transparency.
 
+![OLEcover](https://github.com/user-attachments/assets/84413616-d64a-4ea1-8d9a-cd36e47c71b0)
+
 ## Founders
 
 ### Arihaan Singh Negi
